@@ -93,7 +93,7 @@ export function ProductDialog({ categories, product, trigger }) {
         const data = {
             title: form.get('title'),
             slug: form.get('title').toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-            category: form.get('category'),
+            category: formData.category, // Use state instead of form.get
             price: Number(form.get('price')),
             discountPrice: Number(form.get('discountPrice')) || 0,
             stock: Number(form.get('stock')),

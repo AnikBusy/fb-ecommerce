@@ -29,6 +29,7 @@ export async function getCategoryBySlug(slug) {
 
 export async function createCategory(data) {
     await dbConnect();
+    console.log("[Server Action] createCategory data:", data);
     try {
         const category = await Category.create(data);
         revalidatePath('/admin/categories');

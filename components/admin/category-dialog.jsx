@@ -68,6 +68,8 @@ export function CategoryDialog({ category, trigger }) {
             image: image
         }
 
+        console.log("[CategoryDialog] Submitting category data:", data);
+
         const res = isEdit
             ? await updateCategory(category._id, data)
             : await createCategory(data)

@@ -29,6 +29,7 @@ export async function getProduct(slug) {
 
 export async function createProduct(data) {
     await dbConnect();
+    console.log("[Server Action] createProduct data:", data);
     try {
         const product = await Product.create(data);
         revalidatePath('/admin/products');
