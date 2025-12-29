@@ -8,5 +8,20 @@ export async function GET() {
     await dbConnect();
     const categories = await Category.find({}).lean();
     const products = await Product.find({}).lean();
-    return NextResponse.json({ categories, products });
+
+    // Check Cloudinary config status
+    const cloudinaryConfigured = !!(
+        process.env.CLOUDINARY_CLOUD_NAME &&
+        process.env.CLOUDINARY_API_KEY &&
+        process.env.CLOUDINARY_API_SECRET
+    );
+
+    return NextResponse.json({
+        categories,
+        products,
+        env: {
+            cloudinaryConfigured,
+            nodeEnv: process.env.NODE_ENV
+        }
+    });
 }
