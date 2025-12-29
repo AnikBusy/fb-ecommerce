@@ -5,7 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { CategoryDialog } from "@/components/admin/category-dialog"
 import { Trash2, Pencil } from "lucide-react"
-import { revalidatePath } from "next/cache"
 import { DialogTrigger } from "@/components/ui/dialog"
 
 export default async function CategoriesPage() {

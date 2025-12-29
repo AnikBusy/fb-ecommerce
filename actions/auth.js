@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 const SECRET_KEY = process.env.JWT_SECRET || "super-secret-key-change-this";
 const key = new TextEncoder().encode(SECRET_KEY);
