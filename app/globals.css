@@ -1,26 +1,162 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* =========================================
+       EDIT THESE COLORS TO CHANGE THE THEME
+       ========================================= */
+    --brand-primary: #00ED64;
+    /* The main highlight color (Green) */
+    --brand-dark: #001E2B;
+    /* The main background color */
+    --brand-dark-card: #002333;
+    /* The color for cards and sections */
+    --text-main: #FFFFFF;
+    /* Main text color */
+    --text-muted: #8899A1;
+    /* Muted/secondary text color */
+    --border-color: rgba(255, 255, 255, 0.1);
+    /* Border color */
+
+    /* Generic system variables (linked to the above) */
+    --background: 185 100% 4.5%;
+    /* Map to brand-dark approx */
+    --foreground: 0 0% 100%;
+    --card: 185 100% 6%;
+    --card-foreground: 0 0% 100%;
+    --primary: 161 100% 46%;
+    --primary-foreground: 185 100% 5%;
+    --secondary: 185 100% 10%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 185 100% 10%;
+    --muted-foreground: 185 20% 65%;
+    --accent: 145 100% 20%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 185 100% 12%;
+    --input: 185 100% 12%;
+    --ring: 161 100% 46%;
+    --popover: 185 100% 6%;
+    --popover-foreground: 0 0% 100%;
+    --radius: 1rem;
+
+    /* Shop specifics */
+    --shop-bg: var(--brand-dark);
+    --shop-card: var(--brand-dark-card);
+    --shop-text: var(--text-main);
+    --shop-muted: var(--text-muted);
+    --shop-border: var(--border-color);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground transition-colors duration-300;
+    background-color: var(--brand-dark);
+    color: var(--text-main);
+  }
+}
+
+@layer utilities {
+
+  /* Dynamic utilities linked to your variables above */
+  .bg-mongodb-dark {
+    background-color: var(--brand-dark);
+  }
+
+  .bg-mongodb-green {
+    background-color: var(--brand-primary);
+  }
+
+  .text-mongodb-green {
+    color: var(--brand-primary);
+  }
+
+  .text-mongodb-dark {
+    color: var(--brand-dark);
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Thin Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+@layer components {
+
+  /* High-Contrast Glassmorphism */
+  .glass {
+    @apply backdrop-blur-xl border shadow-2xl;
+    background-color: var(--brand-dark-card);
+    opacity: 1;
+    /* Match user request for non-transparent data */
+    border-color: var(--border-color);
+  }
+
+  .shop-container-bg {
+    background-color: var(--brand-dark);
+    color: var(--text-main);
+  }
+
+  .shop-card-bg {
+    background-color: var(--brand-dark-card);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .shop-text {
+    color: var(--text-main);
+  }
+
+  .shop-muted {
+    color: var(--text-muted);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
 }

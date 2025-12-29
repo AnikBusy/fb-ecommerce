@@ -1,6 +1,15 @@
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  images: {
+    // Allow loading images from localhost or other domains if needed
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+    ],
+  }
 };
 
 export default nextConfig;
