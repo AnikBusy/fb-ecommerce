@@ -3,13 +3,15 @@
 import Link from 'next/link'
 import { useCart } from "@/providers/cart-provider"
 import { useSettings } from "@/providers/settings-provider"
-import { ShoppingBag, Home, ShoppingCart } from "lucide-react"
+import { ShoppingBag, Home, ShoppingCart, Menu } from "lucide-react"
 import { motion, useScroll, useMotionValueEvent } from "framer-motion"
 import { useState } from 'react'
 import { cn } from "@/lib/utils"
 import { CartSheet } from "./cart-sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
+import { CategorySidebar } from "./category-sidebar"
 
-export function Header() {
+export function Header({ categories }) {
     const { cart, setIsOpen } = useCart()
     const settings = useSettings()
     const { scrollY } = useScroll()
@@ -31,16 +33,21 @@ export function Header() {
             )}
         >
             <div className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] h-full px-4 md:px-0 flex items-center justify-between">
-                {/* Logo */}
-                <Link href="/" className="flex items-center gap-2 group">
-                    {settings?.logoUrl ? (
-                        <img src={settings.logoUrl} alt="Logo" className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
-                    ) : (
-                        <span className="text-xl md:text-2xl font-black tracking-tighter uppercase transition-colors duration-300 text-foreground">
-                            {settings?.siteName?.toUpperCase() || 'MY SHOP'}<span className="text-mongodb-green">.</span>
-                        </span>
-                    )}
-                </Link>
+                <div className="flex items-center gap-4">
+                    {/* Mobile Menu Toggle */}
+                    {/* Mobile Menu Toggle - REMOVED */}
+
+                    {/* Logo */}
+                    <Link href="/" className="flex items-center gap-2 group">
+                        {settings?.logoUrl ? (
+                            <img src={settings.logoUrl} alt="Logo" className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
+                        ) : (
+                            <span className="text-xl md:text-2xl font-black tracking-tighter uppercase transition-colors duration-300 text-foreground">
+                                {settings?.siteName?.toUpperCase() || 'MY SHOP'}<span className="text-mongodb-green">.</span>
+                            </span>
+                        )}
+                    </Link>
+                </div>
 
                 {/* Icons - Visible on all devices */}
                 <div className="flex items-center gap-2 md:gap-6">

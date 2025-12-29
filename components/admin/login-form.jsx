@@ -7,11 +7,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { AlertCircle, Loader2 } from "lucide-react"
+import { AlertCircle, Loader2, User, Lock, Eye, EyeOff } from "lucide-react"
 
-export function LoginForm() {
+export function LoginForm({ settings }) {
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)
     const router = useRouter()
 
     async function handleSubmit(event) {
@@ -25,65 +26,88 @@ export function LoginForm() {
         if (result && !result.success) {
             setError(result.error)
             setLoading(false)
-        } else {
-            // Redirect handled server side or here
-            // router.push('/admin/dashboard') 
-            // We rely on server action redirect usually, but client might need refresh
-            // result in login action does redirect.
         }
     }
 
     return (
-        <Card className="w-full max-w-md bg-white/95 backdrop-blur-xl border-zinc-200 shadow-2xl">
-            <CardHeader className="space-y-2 text-center pb-8 pt-10">
-                <div className="mx-auto mb-4">
-                    <span className="text-3xl font-black tracking-tighter uppercase text-zinc-900">Flux<span className="text-mongodb-green">.</span></span>
+        <div className="w-full max-w-md animate-in fade-in zoom-in duration-500">
+            <div className="bg-white/80 backdrop-blur-2xl border border-white/20 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.2)] rounded-[2.5rem] overflow-hidden">
+                <div className="p-10 pt-12 text-center bg-gradient-to-b from-zinc-50/50 to-transparent">
+                    <div className="mx-auto mb-6 h-16 flex items-center justify-center">
+                        {settings?.logoUrl ? (
+                            <img src={settings.logoUrl} alt="Logo" className="h-full w-auto object-contain" />
+                        ) : (
+                            <span className="text-3xl font-black tracking-tighter uppercase text-zinc-950">
+                                {settings?.siteName?.toUpperCase() || 'FLUX'}<span className="text-mongodb-green">.</span>
+                            </span>
+                        )}
+                    </div>
+                    <h1 className="text-2xl font-black uppercase tracking-tight text-zinc-950 mb-2">Admin Terminal</h1>
+                    <p className="text-zinc-500 text-sm font-medium tracking-wide">Enter credentials to authenticate session</p>
                 </div>
-                <CardTitle className="text-xl font-bold text-zinc-800">Welcome Back</CardTitle>
-                <CardDescription className="text-zinc-500">
-                    Sign in to manage your store
-                </CardDescription>
-            </CardHeader>
-            <form onSubmit={handleSubmit}>
-                <CardContent className="grid gap-6 px-8">
+
+                <form onSubmit={handleSubmit} className="px-10 pb-12 pt-2 space-y-6">
                     {error && (
-                        <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 border border-red-100 p-3 rounded-lg">
-                            <AlertCircle className="h-4 w-4" />
+                        <div className="flex items-center gap-3 text-[11px] font-black uppercase tracking-wider text-red-600 bg-red-50/50 border border-red-100 p-4 rounded-2xl">
+                            <AlertCircle className="h-4 w-4 shrink-0" />
                             {error}
                         </div>
                     )}
-                    <div className="grid gap-2">
-                        <Label htmlFor="username" className="font-bold text-zinc-900">Username</Label>
-                        <Input
-                            id="username"
-                            name="username"
-                            type="text"
-                            required
-                            className="bg-white border-zinc-400 text-zinc-900 focus:border-mongodb-green focus:ring-mongodb-green/20 h-11 placeholder:text-zinc-400"
-                            placeholder="Enter your username"
-                        />
-                    </div>
-                    <div className="grid gap-2">
-                        <div className="flex items-center justify-between">
-                            <Label htmlFor="password" className="font-bold text-zinc-900">Password</Label>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="username" className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 ml-4">Registry User</Label>
+                        <div className="relative group">
+                            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-mongodb-green transition-colors">
+                                <User className="w-5 h-5" />
+                            </div>
+                            <Input
+                                id="username"
+                                name="username"
+                                type="text"
+                                required
+                                className="bg-white border-zinc-200 text-zinc-950 focus:border-mongodb-green focus:ring-4 focus:ring-mongodb-green/10 h-16 rounded-[1.25rem] pl-14 pr-6 text-sm font-bold transition-all placeholder:text-zinc-500 placeholder:font-medium placeholder:italic shadow-sm"
+                                placeholder="Identification Handle"
+                            />
                         </div>
-                        <Input
-                            id="password"
-                            name="password"
-                            type="password"
-                            required
-                            className="bg-white border-zinc-400 text-zinc-900 focus:border-mongodb-green focus:ring-mongodb-green/20 h-11 placeholder:text-zinc-400"
-                            placeholder="••••••••"
-                        />
                     </div>
-                </CardContent>
-                <CardFooter className="pb-10 px-8 pt-6">
-                    <Button className="w-full bg-zinc-900 hover:bg-zinc-800 text-white font-bold h-12 transition-all shadow-lg active:scale-95 text-base mt-2" type="submit" disabled={loading}>
-                        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        Sign In
+
+                    <div className="space-y-2">
+                        <Label htmlFor="password" className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 ml-4">Access Key</Label>
+                        <div className="relative group">
+                            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-mongodb-green transition-colors">
+                                <Lock className="w-5 h-5" />
+                            </div>
+                            <Input
+                                id="password"
+                                name="password"
+                                type={showPassword ? "text" : "password"}
+                                required
+                                className="bg-white border-zinc-200 text-zinc-950 focus:border-mongodb-green focus:ring-4 focus:ring-mongodb-green/10 h-16 rounded-[1.25rem] pl-14 pr-14 text-sm font-bold transition-all placeholder:text-zinc-500 placeholder:font-medium placeholder:italic shadow-sm"
+                                placeholder="••••••••••••"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-5 top-1/2 -translate-y-1/2 text-zinc-300 hover:text-zinc-500 transition-colors"
+                            >
+                                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                            </button>
+                        </div>
+                    </div>
+
+                    <Button
+                        className="w-full bg-zinc-950 hover:bg-zinc-900 text-white font-black uppercase tracking-[0.2em] h-16 rounded-[1.25rem] transition-all shadow-2xl shadow-zinc-200 active:scale-95 text-xs border-none mt-4"
+                        type="submit"
+                        disabled={loading}
+                    >
+                        {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Authenticate Identity"}
                     </Button>
-                </CardFooter>
-            </form>
-        </Card>
+                </form>
+            </div>
+
+            <p className="text-center mt-8 text-[10px] font-black uppercase tracking-[0.4em] text-zinc-500/50">
+                System v2.1.0 // Auth Protected
+            </p>
+        </div>
     )
 }

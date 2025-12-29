@@ -27,7 +27,7 @@ export function ProductImageGallery({ images, title }) {
     return (
         <div className="space-y-4">
             {/* Main Image */}
-            <div className="aspect-[4/5] shop-card-bg rounded-xl overflow-hidden shadow-sm border relative group">
+            <div className="w-full md:w-[80%] aspect-[4/3] shop-card-bg rounded-xl overflow-hidden shadow-sm border relative group mx-auto md:mx-0">
                 <div className="absolute inset-0 bg-mongodb-green/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
                 <img
                     src={validImages[selectedIndex]}
@@ -63,7 +63,7 @@ export function ProductImageGallery({ images, title }) {
 
             {/* Thumbnail Grid - Only show if more than 1 image */}
             {validImages.length > 1 && (
-                <div className="grid grid-cols-4 gap-3">
+                <div className="w-full md:w-[80%] grid grid-cols-4 gap-3 mx-auto md:mx-0">
                     {validImages.map((image, index) => (
                         <button
                             key={index}

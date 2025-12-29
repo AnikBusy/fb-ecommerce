@@ -10,7 +10,7 @@ export function CategorySlider({ categories }) {
             <div className="flex items-center justify-between mb-4 md:mb-8 px-2">
                 <h2 className="text-xl font-black uppercase tracking-[0.2em] text-mongodb-green flex items-center gap-3">
                     <span className="h-1 w-8 bg-mongodb-green rounded-full"></span>
-                    Browse by Category
+                    Popular Categories
                 </h2>
                 <Link href="/shop" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-mongodb-green transition-colors flex items-center gap-2">
                     View All <ArrowRight className="w-3 h-3" />

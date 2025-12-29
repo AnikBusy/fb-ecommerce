@@ -28,6 +28,7 @@ export function BannerDialog({ banner, trigger }) {
         type: banner?.type || 'hero',
         order: banner?.order || 0
     })
+    const [bannersCount, setBannersCount] = useState(0)
 
     const router = useRouter()
     const isEdit = !!banner
@@ -41,8 +42,22 @@ export function BannerDialog({ banner, trigger }) {
                 type: banner.type || 'hero',
                 order: banner.order || 0
             })
+        } else if (open) {
+            // Fetch total count for next order
+            const fetchCount = async () => {
+                try {
+                    const res = await fetch('/api/banners-count')
+                    const data = await res.json()
+                    if (data.success) {
+                        setFormData(prev => ({ ...prev, order: data.count }))
+                    }
+                } catch (err) {
+                    console.error("Failed to fetch count:", err)
+                }
+            }
+            fetchCount()
         }
-    }, [banner])
+    }, [banner, open])
 
     async function handleUpload(e) {
         const file = e.target.files[0]
@@ -118,7 +133,7 @@ export function BannerDialog({ banner, trigger }) {
                 <form onSubmit={handleSubmit} className="grid gap-4 py-4">
                     <div className="grid gap-2">
                         <Label htmlFor="title">Banner Title</Label>
-                        <Input id="title" name="title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} required placeholder="e.g. Hero Winter Sale" />
+                        <Input id="title" name="title" value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value })} placeholder="e.g. Hero Winter Sale (Internal Use)" />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">

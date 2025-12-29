@@ -4,6 +4,7 @@ import { getCategories } from "@/actions/category"
 import { ProductCard } from "@/components/shop/product-card"
 import { CategorySlider } from "@/components/shop/category-slider"
 import { BannerCarousel } from "@/components/shop/banner-carousel"
+import { CategorySidebar } from "@/components/shop/category-sidebar"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ArrowRight, Zap, Star, Flame, Sparkles } from "lucide-react"
@@ -34,17 +35,21 @@ export default async function HomePage() {
 
     return (
         <div className="pb-32 overflow-hidden">
-            {/* 1. Hero Banner Section - Full Width with Carousel */}
-            <section className="relative h-[65vh] md:h-[90vh] w-full overflow-hidden border-b">
-                {heroBanners.length > 0 ? (
-                    <BannerCarousel banners={heroBanners} />
-                ) : (
-                    <div className="h-full w-full flex items-center justify-center bg-zinc-900 text-zinc-800 font-black italic text-4xl md:text-8xl select-none">SHOP BANNERS</div>
-                )}
+            {/* 1. Hero Section - Full Width Banner */}
+            <section className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] px-4 md:px-0">
+                <div className="h-[40vh] md:h-[60vh] relative overflow-hidden shadow-lg border border-border">
+                    {heroBanners.length > 0 ? (
+                        <BannerCarousel banners={heroBanners} />
+                    ) : (
+                        <div className="h-full w-full flex items-center justify-center bg-zinc-900 text-zinc-800 font-black italic text-4xl md:text-8xl select-none">SHOP BANNERS</div>
+                    )}
+                </div>
             </section>
 
             {/* Container for Centered Content */}
-            <div className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] px-4 md:px-0 space-y-16 md:space-y-48 mt-12 md:mt-24">
+            <div className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] px-4 md:px-0 space-y-12 md:space-y-24 mt-8 md:mt-16">
+
+
 
                 {/* 2. Rolling Categories Section */}
                 <CategorySlider categories={categories} />
@@ -55,18 +60,17 @@ export default async function HomePage() {
 
                     <div className="relative p-0">
                         <div className="">
-                            <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-12 gap-8">
-                                <div className="space-y-4">
+                            <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-8 gap-4">
+                                <div className="space-y-2">
                                     <div className="flex items-center gap-3">
-                                        <div className="h-0.5 w-8 bg-mongodb-green"></div>
-                                        <span className="text-mongodb-green text-[10px] font-black uppercase tracking-[0.4em]">Pulse Stream</span>
+                                        <div className="h-0.5 w-6 bg-mongodb-green"></div>
+                                        <span className="text-mongodb-green text-[9px] font-black uppercase tracking-[0.3em]">Pulse Stream</span>
                                     </div>
-                                    <h3 className="text-4xl md:text-6xl font-black uppercase tracking-tighter shop-text">Just Arrived</h3>
-                                    <p className="shop-muted text-sm md:text-base font-medium italic max-w-xl">Curated modules from the latest shipment, calibrated for peak performance.</p>
+                                    <h3 className="text-2xl md:text-4xl font-black uppercase tracking-tighter shop-text">Just Arrived</h3>
                                 </div>
-                                <Link href="/shop" className="group flex items-center gap-6 bg-mongodb-green px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95">
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-mongodb-dark">Full Manifest</span>
-                                    <ArrowRight className="w-4 h-4 text-mongodb-dark transition-transform group-hover:translate-x-1" />
+                                <Link href="/shop" className="group flex items-center gap-4 bg-mongodb-green px-6 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all hover:scale-105 active:scale-95 w-fit">
+                                    <span className="text-[9px] font-black uppercase tracking-widest text-mongodb-dark">Full Manifest</span>
+                                    <ArrowRight className="w-3.5 h-3.5 text-mongodb-dark transition-transform group-hover:translate-x-1" />
                                 </Link>
                             </div>
                             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
@@ -86,21 +90,16 @@ export default async function HomePage() {
                     <div className="absolute top-0 right-0 w-96 h-96 bg-orange-500/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen"></div>
                     <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen"></div>
 
-                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8 relative z-10">
-                        <div className="space-y-6">
-                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/10 border border-orange-500/20 backdrop-blur-sm">
-                                <Flame className="w-4 h-4 text-orange-500 fill-orange-500 animate-pulse" />
-                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-orange-600 dark:text-orange-400">Trending Now</span>
+                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6 relative z-10">
+                        <div className="space-y-4">
+                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 backdrop-blur-sm">
+                                <Flame className="w-3.5 h-3.5 text-orange-500 fill-orange-500 animate-pulse" />
+                                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-orange-600 dark:text-orange-400">Trending Now</span>
                             </div>
-                            <h2 className="text-4xl md:text-7xl font-black uppercase tracking-tighter shop-text leading-[0.9]">
-                                Most Loved <br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500">Items</span>
+                            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter shop-text leading-[0.9]">
+                                Most Loved <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500">Items</span>
                             </h2>
                         </div>
-
-                        <p className="shop-muted text-sm md:text-lg font-medium italic max-w-sm text-right hidden md:block leading-relaxed">
-                            These pieces are disappearing correctly. Secure your elite gear before the inventory resets.
-                        </p>
                     </div>
 
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 relative z-10">
@@ -113,53 +112,67 @@ export default async function HomePage() {
                 </section>
 
                 {/* 5. Promotional Banners: Premium Glassmorphism Redesign */}
-                {serializedPromoBanners.length > 0 && (
-                    <section className="grid md:grid-cols-2 gap-8 lg:gap-12">
-                        {serializedPromoBanners.slice(0, 2).map((banner) => (
-                            <Link
-                                key={banner._id}
-                                href={banner.link || '#'}
-                                className="group relative aspect-[16/9] md:aspect-video rounded-[3rem] overflow-hidden shadow-2xl transition-all duration-700 hover:scale-[1.02] hover:shadow-mongodb-green/20"
-                            >
-                                {/* Background Image with dynamic zoom */}
-                                <img
-                                    src={banner.imageUrl}
-                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 brightness-[0.6] contrast-[1.1]"
-                                    alt={banner.title}
-                                />
+                {/* 5. Promotional Banners: Premium Feature Section */}
 
-                                {/* Overlay Content */}
-                                <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
-                                    <div className="space-y-4 transform transition-all duration-500 group-hover:translate-y-[-8px]">
-                                        <div className="flex items-center gap-3">
-                                            <div className="h-0.5 w-8 bg-mongodb-green group-hover:w-16 transition-all duration-500"></div>
-                                            <span className="text-mongodb-green text-[10px] font-black uppercase tracking-[0.4em]">Limited Edition</span>
-                                        </div>
-                                        <h3 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white leading-[0.85] max-w-[80%]">
-                                            {banner.title}
-                                        </h3>
-                                        <div className="pt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                            <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest italic">Experience the ultimate calibration</p>
-                                        </div>
+
+
+                {/* 5. Promotional Banners: Hero Style Redesign */}
+                {serializedPromoBanners.length > 0 && (() => {
+                    const promo = serializedPromoBanners[0];
+                    return (
+                        <section className="relative w-full h-[400px] overflow-hidden group my-12 md:my-20">
+                            {/* Background Image */}
+                            <div className="absolute inset-0">
+                                <img
+                                    src={promo.imageUrl}
+                                    alt={promo.title || "Promotional Banner"}
+                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                                />
+                                {/* Overlay Gradient - Darker for better text readability */}
+                                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors duration-700"></div>
+                            </div>
+
+                            {/* Content Overlay */}
+                            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 z-10">
+                                <div className="space-y-6 max-w-3xl">
+                                    <div className="flex items-center justify-center gap-3">
+                                        <span className="h-px w-10 bg-yellow-500"></span>
+                                        <span className="text-[11px] font-black uppercase tracking-[0.3em] text-yellow-500 shadow-sm">Exclusive Offer</span>
+                                        <span className="h-px w-10 bg-yellow-500"></span>
+                                    </div>
+
+                                    <h2 className="text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter text-yellow-500 leading-[0.9] drop-shadow-2xl">
+                                        {promo.title || "Special Promotion"}
+                                    </h2>
+
+                                    <p className="text-zinc-200 font-medium text-lg md:text-xl max-w-xl mx-auto leading-relaxed drop-shadow-md">
+                                        Discover our latest collection defined by innovation, style, and premium quality.
+                                    </p>
+
+                                    <div className="pt-4">
+                                        <Link
+                                            href={promo.link || '/shop'}
+                                            className="inline-flex items-center gap-3 bg-yellow-500 text-black px-8 py-4 rounded-full font-black uppercase tracking-widest hover:bg-white hover:scale-105 transition-all duration-300 shadow-xl"
+                                        >
+                                            Shop Now
+                                            <ArrowRight className="w-4 h-4" />
+                                        </Link>
                                     </div>
                                 </div>
-
-                                {/* Glassmorphism Border Overlay */}
-                                <div className="absolute inset-0 border border-white/10 rounded-[3rem] pointer-events-none group-hover:border-mongodb-green/30 transition-colors duration-500"></div>
-                            </Link>
-                        ))}
-                    </section>
-                )}
+                            </div>
+                        </section>
+                    );
+                })()}
 
                 {/* 6. Promotional Products */}
                 <section className="space-y-12">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-                        <div className="space-y-3">
+                        <div className="space-y-2">
                             <div className="flex items-center gap-2 text-yellow-500">
-                                <Sparkles className="w-4 h-4 fill-yellow-500" />
-                                <span className="text-[10px] font-black uppercase tracking-[0.4em]">Current Stream</span>
+                                <Sparkles className="w-3.5 h-3.5 fill-yellow-500" />
+                                <span className="text-[9px] font-black uppercase tracking-[0.3em]">Current Stream</span>
                             </div>
-                            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter shop-text">Featured Offers</h2>
+                            <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tighter shop-text">Featured Offers</h2>
                         </div>
                     </div>
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">

@@ -1,7 +1,9 @@
-
 import { LoginForm } from "@/components/admin/login-form"
+import { getSettings } from "@/actions/settings"
 
-export default function LoginPage() {
+export default async function LoginPage() {
+    const settings = await getSettings()
+
     return (
         <div className="flex min-h-screen items-center justify-center bg-zinc-950 p-4 relative overflow-hidden">
             {/* Background Effects */}
@@ -9,7 +11,7 @@ export default function LoginPage() {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-mongodb-green/20 rounded-full blur-[100px] pointer-events-none animate-pulse"></div>
 
             <div className="relative z-10 w-full max-w-sm">
-                <LoginForm />
+                <LoginForm settings={settings} />
             </div>
         </div>
     )

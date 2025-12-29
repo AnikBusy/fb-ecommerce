@@ -36,7 +36,7 @@ export default async function ProductPage({ params }) {
     const serializedRelated = JSON.parse(JSON.stringify(relatedProducts))
 
     return (
-        <div className="shop-container-bg min-h-screen pb-32">
+        <div className="bg-background min-h-screen pb-32">
             <div className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] py-12 md:py-24 px-4 md:px-0">
                 {/* Breadcrumb / Back */}
                 <Link href="/shop" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest shop-muted hover:text-mongodb-green transition-colors mb-16 group">
@@ -55,21 +55,21 @@ export default async function ProductPage({ params }) {
                         <div className="space-y-10">
                             <div className="space-y-6">
                                 <div className="flex items-center gap-3 text-mongodb-green">
-                                    <Sparkles className="w-5 h-5" />
-                                    <span className="text-[10px] font-black tracking-[0.5em] uppercase">{serializedProduct.category?.name || 'Exclusive Edition'}</span>
+                                    <Sparkles className="w-4 h-4 md:w-5 md:h-5" />
+                                    <span className="text-[9px] md:text-[10px] font-black tracking-[0.5em] uppercase">{serializedProduct.category?.name || 'Exclusive Edition'}</span>
                                 </div>
-                                <h1 className="text-4xl md:text-7xl font-black tracking-tighter shop-text leading-[0.9] uppercase">{serializedProduct.title}</h1>
+                                <h1 className="text-2xl md:text-5xl font-black tracking-tighter shop-text leading-[0.9] uppercase">{serializedProduct.title}</h1>
                             </div>
 
                             <div className="flex items-center gap-8">
-                                <span className="text-5xl md:text-6xl font-black shop-text italic tracking-tighter flex items-baseline gap-1">
+                                <span className="text-3xl md:text-6xl font-black shop-text italic tracking-tighter flex items-baseline gap-1">
                                     {serializedProduct.discountPrice || serializedProduct.price}
-                                    <span className="text-2xl md:text-3xl opacity-50 font-normal not-italic tracking-normal">TK.</span>
+                                    <span className="text-xl md:text-3xl opacity-50 font-normal not-italic tracking-normal">TK.</span>
                                 </span>
                                 {serializedProduct.discountPrice > 0 && (
                                     <div className="flex flex-col">
-                                        <span className="text-xl shop-muted line-through font-bold opacity-40">{serializedProduct.price} TK.</span>
-                                        <span className="text-mongodb-green text-[10px] font-black uppercase tracking-widest bg-mongodb-green/10 px-3 py-1 rounded-full w-fit">Save {serializedProduct.price - serializedProduct.discountPrice} TK.</span>
+                                        <span className="text-sm md:text-xl shop-muted line-through font-bold opacity-40">{serializedProduct.price} TK.</span>
+                                        <span className="text-mongodb-green text-[9px] md:text-[10px] font-black uppercase tracking-widest bg-mongodb-green/10 px-2 py-0.5 md:px-3 md:py-1 rounded-full w-fit">Save {serializedProduct.price - serializedProduct.discountPrice} TK.</span>
                                     </div>
                                 )}
                             </div>
@@ -101,7 +101,7 @@ export default async function ProductPage({ params }) {
                             <div className="h-12 w-12 rounded-2xl bg-mongodb-green/10 flex items-center justify-center border border-mongodb-green/20">
                                 <Package className="w-6 h-6 text-mongodb-green" />
                             </div>
-                            <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter shop-text">Product Details</h2>
+                            <h2 className="text-xl md:text-2xl font-black uppercase tracking-tighter shop-text">Product Details</h2>
                         </div>
 
                         <div className="shop-card-bg rounded-xl p-8 border shadow-sm">

@@ -12,6 +12,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Plus, Loader2, Pencil } from "lucide-react"
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
@@ -65,7 +66,7 @@ export function CategoryDialog({ category, trigger }) {
         const data = {
             name: formData.get('name'),
             slug: formData.get('name').toLowerCase().replace(/\s+/g, '-'),
-            image: image
+            image: image,
         }
 
         console.log("[CategoryDialog] Submitting category data:", data);
@@ -87,6 +88,7 @@ export function CategoryDialog({ category, trigger }) {
             toast.error(`Failed to ${isEdit ? 'update' : 'create'} category`)
         }
     }
+
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>

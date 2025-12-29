@@ -24,8 +24,12 @@ export default async function CategoryPage({ params }) {
         notFound()
     }
 
-    const products = await getProducts({ category: category._id })
+    // Fetch child categories to include their products
     const allCategories = await getCategories()
+    const children = allCategories.filter(c => c.parent?._id === category._id || c.parent === category._id)
+    const categoryIds = [category._id, ...children.map(c => c._id)]
+
+    const products = await getProducts({ category: { $in: categoryIds } })
 
     // Serialize to plain objects for client components
     const serializedProducts = JSON.parse(JSON.stringify(products))
@@ -45,7 +49,7 @@ export default async function CategoryPage({ params }) {
                             <Sparkles className="w-5 h-5" />
                             <span className="text-[10px] font-black tracking-[0.5em] uppercase">COLLECTION</span>
                         </div>
-                        <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter shop-text leading-none">{category.name}</h1>
+                        <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tighter shop-text leading-none">{category.name}</h1>
                         <p className="shop-muted text-sm md:text-lg max-w-2xl italic font-medium leading-relaxed">
                             Displaying {serializedProducts.length} elite items from the {category.name} manifest. Curated for performance and durability.
                         </p>
@@ -65,15 +69,31 @@ export default async function CategoryPage({ params }) {
                                     Full Collection
                                     <div className="w-6 h-px bg-zinc-800 group-hover:bg-mongodb-green transition-colors"></div>
                                 </Link>
-                                {serializedCategories.map(cat => (
-                                    <Link
-                                        key={cat._id}
-                                        href={`/category/${cat.slug}`}
-                                        className={`text-sm font-black uppercase tracking-widest transition-colors flex items-center justify-between group ${cat._id === category._id ? 'text-mongodb-green' : 'text-zinc-400 hover:text-mongodb-green'}`}
-                                    >
-                                        {cat.name}
-                                        <div className={`w-6 h-px transition-colors ${cat._id === category._id ? 'bg-mongodb-green' : 'bg-zinc-800 group-hover:bg-mongodb-green'}`}></div>
-                                    </Link>
+                                {serializedCategories.filter(c => !c.parent).map(cat => (
+                                    <div key={cat._id} className="space-y-2">
+                                        <Link
+                                            href={`/category/${cat.slug}`}
+                                            className={`text-sm font-black uppercase tracking-widest transition-colors flex items-center justify-between group ${cat._id === category._id ? 'text-mongodb-green' : 'text-zinc-400 hover:text-mongodb-green'}`}
+                                        >
+                                            {cat.name}
+                                            <div className={`w-6 h-px transition-colors ${cat._id === category._id ? 'bg-mongodb-green' : 'bg-zinc-800 group-hover:bg-mongodb-green'}`}></div>
+                                        </Link>
+
+                                        {/* Show children if this is the active parent or contains the active child */}
+                                        {(cat._id === category._id || category.parent?._id === cat._id) && (
+                                            <div className="ml-4 flex flex-col gap-2 border-l border-zinc-800 pl-4 py-2">
+                                                {serializedCategories.filter(c => c.parent?._id === cat._id).map(child => (
+                                                    <Link
+                                                        key={child._id}
+                                                        href={`/category/${child.slug}`}
+                                                        className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${child._id === category._id ? 'text-mongodb-green' : 'text-zinc-500 hover:text-mongodb-green'}`}
+                                                    >
+                                                        {child.name}
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 ))}
                             </div>
                         </div>

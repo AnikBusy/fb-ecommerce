@@ -280,11 +280,38 @@ export function OrderTable({ orders, pagination }) {
                                     <TableCell className="text-right">
                                         <div className="flex justify-end items-center gap-1">
                                             {trackingUrl && (
-                                                <a href={trackingUrl} target="_blank" rel="noreferrer">
-                                                    <Button variant="ghost" size="icon" title="Track Order" className="h-7 w-7 hover:bg-blue-100 hover:text-blue-700">
-                                                        <Map className="h-3.5 w-3.5" />
-                                                    </Button>
-                                                </a>
+                                                <Dialog>
+                                                    <DialogTrigger asChild>
+                                                        <Button variant="ghost" size="icon" title="Track Order" className="h-7 w-7 hover:bg-blue-100 hover:text-blue-700">
+                                                            <Map className="h-3.5 w-3.5" />
+                                                        </Button>
+                                                    </DialogTrigger>
+                                                    <DialogContent className="max-w-4xl h-[80vh] flex flex-col p-0 gap-0">
+                                                        <DialogHeader className="p-4 border-b bg-muted/20">
+                                                            <DialogTitle className="flex items-center gap-2">
+                                                                <Truck className="w-5 h-5 text-muted-foreground" />
+                                                                Tracking: #{order.trackingId || order._id}
+                                                            </DialogTitle>
+                                                        </DialogHeader>
+                                                        <div className="flex-1 bg-white relative">
+                                                            <iframe
+                                                                src={trackingUrl}
+                                                                className="w-full h-full border-0"
+                                                                title="Tracking Information"
+                                                                sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                                                            />
+                                                            {/* Fallback/External Link option in case iframe is blocked */}
+                                                            <div className="absolute bottom-4 right-4">
+                                                                <a href={trackingUrl} target="_blank" rel="noreferrer">
+                                                                    <Button size="sm" className="shadow-lg gap-2 cursor-pointer pointer-events-auto relative z-50">
+                                                                        <ExternalLink className="w-4 h-4" />
+                                                                        Open in New Tab
+                                                                    </Button>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </DialogContent>
+                                                </Dialog>
                                             )}
                                             <Link href={`/admin/orders/edit/${order._id}`}>
                                                 <Button variant="ghost" size="icon" title="Edit Order" className="h-7 w-7 hover:bg-amber-100 hover:text-amber-700">

@@ -7,6 +7,7 @@ export const NAV_ITEMS = [
     { href: "/admin/incomplete-orders", label: "Incomplete", icon: FileClock },
     { href: "/admin/products", label: "Products", icon: ShoppingBag },
     { href: "/admin/banners", label: "Banners", icon: Image },
+
     { href: "/admin/categories", label: "Categories", icon: Package },
     { href: "/admin/pages", label: "Pages", icon: FileText },
     { href: "/admin/admins", label: "Admins", icon: Users },
