@@ -36,8 +36,8 @@ export default async function ProductPage({ params }) {
     const serializedRelated = JSON.parse(JSON.stringify(relatedProducts))
 
     return (
-        <div className="bg-background min-h-screen pb-32">
-            <div className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] py-12 md:py-24 px-4 md:px-0">
+        <div className="bg-background min-h-screen md:pb-32 pb-10">
+            <div className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] py-4 md:py-24 px-4 md:px-0">
                 {/* Breadcrumb / Back */}
                 <Link href="/shop" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest shop-muted hover:text-mongodb-green transition-colors mb-16 group">
                     <ArrowLeft className="w-3 h-3 transition-transform group-hover:-translate-x-1" />

@@ -6,9 +6,9 @@ import { ArrowRight } from "lucide-react"
 
 export function CategorySlider({ categories }) {
     return (
-        <section className="py-6 md:py-12 overflow-hidden">
+        <section className="py-2 md:py-5 overflow-hidden">
             <div className="flex items-center justify-between mb-4 md:mb-8 px-2">
-                <h2 className="text-xl font-black uppercase tracking-[0.2em] text-mongodb-green flex items-center gap-3">
+                <h2 className="md:text-xl text-sm font-black uppercase tracking-[0.2em] text-mongodb-green flex items-center gap-3">
                     <span className="h-1 w-8 bg-mongodb-green rounded-full"></span>
                     Popular Categories
                 </h2>
