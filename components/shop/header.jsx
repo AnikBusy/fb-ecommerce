@@ -24,6 +24,8 @@ export function Header({ categories }) {
 
     const cartCount = cart?.reduce((acc, item) => acc + item.quantity, 0) || 0
 
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
     return (
         <motion.header
             className={cn(
@@ -36,9 +38,31 @@ export function Header({ categories }) {
             <div className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] h-full px-4 md:px-0 flex items-center justify-between">
                 <div className="flex items-center gap-4">
                     {/* Mobile Menu Toggle */}
-                    {/* Mobile Menu Toggle - REMOVED */}
+                    <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+                        <SheetTrigger asChild>
+                            <button className="md:hidden p-2 text-foreground hover:bg-secondary/50 rounded-full transition-colors">
+                                <Menu className="w-6 h-6" />
+                            </button>
+                        </SheetTrigger>
+                        <SheetContent side="left" className="p-0 border-r border-zinc-100 dark:border-zinc-800 w-[300px]">
+                            <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+                            <div className="h-full flex flex-col">
+                                <div className="p-6 border-b border-zinc-100 dark:border-zinc-900">
+                                    <span className="text-xl font-black uppercase tracking-tighter">
+                                        {settings?.siteName?.toUpperCase() || 'MY SHOP'}<span className="text-mongodb-green">.</span>
+                                    </span>
+                                </div>
+                                <div className="flex-1 overflow-hidden">
+                                    <CategorySidebar
+                                        categories={categories || []}
+                                        onSelect={() => setIsMobileMenuOpen(false)}
+                                    />
+                                </div>
+                            </div>
+                        </SheetContent>
+                    </Sheet>
 
-                    {/* Logo */}
+                    {/* Logo - Hide on mobile if space is tight, currently visible */}
                     <Link href="/" className="flex items-center gap-2 group">
                         {settings?.logoUrl ? (
                             <img src={settings.logoUrl} alt="Logo" className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />

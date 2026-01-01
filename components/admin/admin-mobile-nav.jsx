@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from "react"
 import { Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
@@ -7,9 +8,11 @@ import { AdminNav } from "./admin-nav"
 import { AdminProfileSection } from "./admin-profile-section"
 
 export function AdminMobileNav({ admin, settings, pendingCount }) {
+    const [open, setOpen] = useState(false)
+
     return (
         <div className="lg:hidden">
-            <Sheet>
+            <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger asChild>
                     <Button variant="ghost" size="icon">
                         <Menu className="h-6 w-6" />
@@ -23,7 +26,11 @@ export function AdminMobileNav({ admin, settings, pendingCount }) {
                         </SheetTitle>
                     </SheetHeader>
                     <div className="flex-1 overflow-y-auto py-2">
-                        <AdminNav className="grid items-start px-4 text-sm font-medium" pendingCount={pendingCount} />
+                        <AdminNav
+                            className="grid items-start px-4 text-sm font-medium"
+                            pendingCount={pendingCount}
+                            onItemClick={() => setOpen(false)}
+                        />
                     </div>
                     <div className="p-2 border-t mt-auto">
                         <AdminProfileSection admin={admin} />

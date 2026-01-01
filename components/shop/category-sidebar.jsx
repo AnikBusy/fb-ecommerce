@@ -3,9 +3,11 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { ChevronRight, ChevronDown, LayoutGrid } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 
-export function CategorySidebar({ categories, className }) {
+export function CategorySidebar({ categories, className, onSelect }) {
+    const pathname = usePathname()
     const [expanded, setExpanded] = useState({})
 
     const toggleExpand = (id, e) => {
@@ -14,13 +16,17 @@ export function CategorySidebar({ categories, className }) {
         setExpanded(prev => ({ ...prev, [id]: !prev[id] }))
     }
 
+    const handleSelect = () => {
+        if (onSelect) onSelect()
+    }
+
     // Organize categories into parents and children
     const parentCategories = categories.filter(c => !c.parent)
     const getChildren = (parentId) => categories.filter(c => c.parent?._id === parentId || c.parent === parentId)
 
     return (
-        <div className={cn("w-full h-full bg-white dark:bg-zinc-950 flex flex-col", className)}>
-            <div className="p-6 border-b border-zinc-100 dark:border-zinc-900">
+        <div className={cn("w-full h-full flex flex-col", className)}>
+            <div className="p-6">
                 <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-mongodb-green/10 flex items-center justify-center text-mongodb-green">
                         <LayoutGrid className="w-4 h-4" />
@@ -33,32 +39,60 @@ export function CategorySidebar({ categories, className }) {
             </div>
 
             <nav className="flex-1 p-3 space-y-1 overflow-y-auto custom-scrollbar">
+                {/* Full Collection Link */}
+                <div className="mb-2">
+                    <Link
+                        href="/shop"
+                        onClick={handleSelect}
+                        className={cn(
+                            "group flex items-center justify-between rounded-xl transition-all duration-300",
+                            pathname === '/shop' ? "bg-zinc-50 dark:bg-zinc-900 shadow-sm" : "hover:bg-zinc-50 dark:hover:bg-zinc-900"
+                        )}
+                    >
+                        <div className={cn(
+                            "flex-1 px-4 py-3 text-[11px] font-black uppercase tracking-widest transition-all",
+                            "text-zinc-600 dark:text-zinc-400 group-hover:text-mongodb-green",
+                            pathname === '/shop' && "text-mongodb-green"
+                        )}>
+                            <div className="flex items-center gap-3">
+                                <div className={cn(
+                                    "w-1.5 h-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 transition-all duration-300",
+                                    "group-hover:bg-mongodb-green group-hover:scale-125 shadow-[0_0_10px_rgba(0,237,100,0)] group-hover:shadow-[0_0_10px_rgba(0,237,100,0.4)]",
+                                    pathname === '/shop' && "bg-mongodb-green scale-125 shadow-[0_0_10px_rgba(0,237,100,0.4)]"
+                                )}></div>
+                                Full Collection
+                            </div>
+                        </div>
+                    </Link>
+                </div>
                 {parentCategories.map(category => {
                     const children = getChildren(category._id)
                     const hasChildren = children.length > 0
                     const isExpanded = expanded[category._id]
+                    const isActive = pathname === `/category/${category.slug}`
 
                     return (
                         <div key={category._id} className="space-y-1">
                             <div
                                 className={cn(
                                     "group flex items-center justify-between rounded-xl transition-all duration-300",
-                                    isExpanded ? "bg-zinc-50 dark:bg-zinc-900 shadow-sm" : "hover:bg-zinc-50 dark:hover:bg-zinc-900"
+                                    (isExpanded || isActive) ? "bg-zinc-50 dark:bg-zinc-900 shadow-sm" : "hover:bg-zinc-50 dark:hover:bg-zinc-900"
                                 )}
                             >
                                 <Link
                                     href={`/category/${category.slug}`}
+                                    onClick={handleSelect}
                                     className={cn(
                                         "flex-1 px-4 py-3 text-[11px] font-black uppercase tracking-widest transition-all",
                                         "text-zinc-600 dark:text-zinc-400 group-hover:text-mongodb-green",
-                                        isExpanded && "text-mongodb-green"
+                                        (isExpanded || isActive) && "text-mongodb-green"
                                     )}
                                 >
                                     <div className="flex items-center gap-3">
                                         <div className={cn(
                                             "w-1.5 h-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 transition-all duration-300",
                                             "group-hover:bg-mongodb-green group-hover:scale-125 shadow-[0_0_10px_rgba(0,237,100,0)] group-hover:shadow-[0_0_10px_rgba(0,237,100,0.4)]",
-                                            isExpanded && "bg-mongodb-green scale-125 shadow-[0_0_10px_rgba(0,237,100,0.4)]"
+                                            (isExpanded || isActive) && "bg-mongodb-green scale-125 shadow-[0_0_10px_rgba(0,237,100,0.4)]"
                                         )}></div>
                                         {category.name}
                                     </div>
@@ -79,16 +113,26 @@ export function CategorySidebar({ categories, className }) {
 
                             {hasChildren && isExpanded && (
                                 <div className="ml-6 border-l-2 border-zinc-100 dark:border-zinc-800 space-y-0.5 animate-in slide-in-from-top-2 duration-300">
-                                    {children.map(child => (
-                                        <Link
-                                            key={child._id}
-                                            href={`/category/${child.slug}`}
-                                            className="group flex items-center gap-3 px-5 py-2.5 text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:text-mongodb-green transition-all"
-                                        >
-                                            <div className="w-2 h-px bg-zinc-200 dark:bg-zinc-800 group-hover:w-4 group-hover:bg-mongodb-green transition-all"></div>
-                                            {child.name}
-                                        </Link>
-                                    ))}
+                                    {children.map(child => {
+                                        const isChildActive = pathname === `/category/${child.slug}`
+                                        return (
+                                            <Link
+                                                key={child._id}
+                                                href={`/category/${child.slug}`}
+                                                onClick={handleSelect}
+                                                className={cn(
+                                                    "group flex items-center gap-3 px-5 py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all",
+                                                    isChildActive ? "text-mongodb-green" : "text-zinc-400 hover:text-mongodb-green"
+                                                )}
+                                            >
+                                                <div className={cn(
+                                                    "w-2 h-px transition-all",
+                                                    isChildActive ? "w-4 bg-mongodb-green" : "bg-zinc-200 dark:bg-zinc-800 group-hover:w-4 group-hover:bg-mongodb-green"
+                                                )}></div>
+                                                {child.name}
+                                            </Link>
+                                        )
+                                    })}
                                 </div>
                             )}
                         </div>

@@ -1,5 +1,6 @@
 import { getProducts } from "@/actions/product"
 import { getCategories, getCategoryBySlug } from "@/actions/category"
+import { CategorySidebar } from "@/components/shop/category-sidebar"
 import { ProductCard } from "@/components/shop/product-card"
 import Link from "next/link"
 import { ArrowLeft, Sparkles } from "lucide-react"
@@ -58,47 +59,12 @@ export default async function CategoryPage({ params }) {
 
                 <div className="grid lg:grid-cols-4 gap-12 md:gap-20">
                     {/* Sidebar Filters */}
-                    <aside className="space-y-12">
-                        <div className="space-y-8">
-                            <h3 className="text-xs font-black uppercase tracking-[0.4em] text-mongodb-green">Other Clusters</h3>
-                            <div className="flex flex-col gap-4">
-                                <Link
-                                    href="/shop"
-                                    className="text-sm font-black uppercase tracking-widest text-zinc-400 hover:text-mongodb-green transition-colors flex items-center justify-between group"
-                                >
-                                    Full Collection
-                                    <div className="w-6 h-px bg-zinc-800 group-hover:bg-mongodb-green transition-colors"></div>
-                                </Link>
-                                {serializedCategories.filter(c => !c.parent).map(cat => (
-                                    <div key={cat._id} className="space-y-2">
-                                        <Link
-                                            href={`/category/${cat.slug}`}
-                                            className={`text-sm font-black uppercase tracking-widest transition-colors flex items-center justify-between group ${cat._id === category._id ? 'text-mongodb-green' : 'text-zinc-400 hover:text-mongodb-green'}`}
-                                        >
-                                            {cat.name}
-                                            <div className={`w-6 h-px transition-colors ${cat._id === category._id ? 'bg-mongodb-green' : 'bg-zinc-800 group-hover:bg-mongodb-green'}`}></div>
-                                        </Link>
-
-                                        {/* Show children if this is the active parent or contains the active child */}
-                                        {(cat._id === category._id || category.parent?._id === cat._id) && (
-                                            <div className="ml-4 flex flex-col gap-2 border-l border-zinc-800 pl-4 py-2">
-                                                {serializedCategories.filter(c => c.parent?._id === cat._id).map(child => (
-                                                    <Link
-                                                        key={child._id}
-                                                        href={`/category/${child.slug}`}
-                                                        className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${child._id === category._id ? 'text-mongodb-green' : 'text-zinc-500 hover:text-mongodb-green'}`}
-                                                    >
-                                                        {child.name}
-                                                    </Link>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
+                    <aside className="hidden lg:block h-fit sticky top-24">
+                        <div className="rounded-2xl border border-zinc-100 dark:border-zinc-800 overflow-hidden">
+                            <CategorySidebar categories={serializedCategories} />
                         </div>
 
-                        <div className="p-8 rounded-[2rem] bg-mongodb-dark/50 border border-white/5 shadow-sm backdrop-blur-sm">
+                        <div className="mt-8 p-8 rounded-[2rem] bg-mongodb-dark/50 border border-white/5 shadow-sm backdrop-blur-sm">
                             <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-mongodb-green/60 mb-6">Quality Assurance</h4>
                             <p className="text-xs shop-muted leading-relaxed italic font-medium">Every item in this collection is handpicked and quality verified for the flux community.</p>
                         </div>
