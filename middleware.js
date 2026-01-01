@@ -23,6 +23,19 @@ export async function middleware(request) {
         }
     }
 
+    // Auto-redirect to dashboard if accessing login page while already logged in
+    if (path === "/admin/login") {
+        const token = request.cookies.get("admin_token")?.value;
+        if (token) {
+            try {
+                await jwtVerify(token, key);
+                return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+            } catch (e) {
+                // Token invalid, let them stay on login page
+            }
+        }
+    }
+
     return NextResponse.next();
 }
 

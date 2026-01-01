@@ -63,12 +63,14 @@ export function CheckoutForm() {
 
         const res = await createOrder(orderData)
 
-        setLoading(false)
         if (res.success) {
             clearCart()
-            toast.success('Order placed successfully!')
+            toast.success('Order placed successfully!', { duration: 5000 })
+            // Immediate partial update or optimistic UI could go here, 
+            // but for now, we just push immediately.
             router.push(`/order-success/${res.order._id}`)
         } else {
+            setLoading(false)
             toast.error('Failed to place order: ' + res.error)
         }
     }
@@ -155,7 +157,7 @@ export function CheckoutForm() {
                 <CardFooter>
                     <Button className="w-full" type="submit" disabled={loading}>
                         {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        Place Order
+                        {loading ? 'Processing Order...' : 'Place Order'}
                     </Button>
                 </CardFooter>
             </Card>

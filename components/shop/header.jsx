@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useCart } from "@/providers/cart-provider"
 import { useSettings } from "@/providers/settings-provider"
 import { ShoppingBag, Home, ShoppingCart, Menu } from "lucide-react"
@@ -51,25 +52,8 @@ export function Header({ categories }) {
 
                 {/* Icons - Visible on all devices */}
                 <div className="flex items-center gap-2 md:gap-6">
-                    <Link href="/" className={cn(
-                        "flex items-center gap-2 px-3 py-2 rounded-full transition-colors",
-                        isScrolled
-                            ? "text-foreground hover:bg-secondary hover:text-mongodb-green"
-                            : "text-foreground hover:bg-secondary/50"
-                    )}>
-                        <Home className="w-5 h-5 md:w-5 md:h-5" />
-                        <span className="hidden md:inline text-sm font-bold uppercase tracking-wider">Home</span>
-                    </Link>
-
-                    <Link href="/shop" className={cn(
-                        "flex items-center gap-2 px-3 py-2 rounded-full transition-colors",
-                        isScrolled
-                            ? "text-foreground hover:bg-secondary hover:text-mongodb-green"
-                            : "text-foreground hover:bg-secondary/50"
-                    )}>
-                        <ShoppingBag className="w-5 h-5 md:w-5 md:h-5" />
-                        <span className="hidden md:inline text-sm font-bold uppercase tracking-wider">Shop</span>
-                    </Link>
+                    <ActiveLink href="/" icon={Home} label="Home" isScrolled={isScrolled} isExact={true} />
+                    <ActiveLink href="/shop" icon={ShoppingBag} label="Shop" isScrolled={isScrolled} />
 
                     <button
                         onClick={() => setIsOpen(true)}
@@ -93,5 +77,25 @@ export function Header({ categories }) {
                 </div>
             </div>
         </motion.header>
+    )
+}
+
+function ActiveLink({ href, icon: Icon, label, isScrolled, isExact = false }) {
+    const pathname = usePathname()
+    const isActive = isExact ? pathname === href : pathname.startsWith(href)
+
+    return (
+        <Link href={href} className={cn(
+            "flex items-center gap-2 px-3 py-2 rounded-full transition-colors",
+            // Base styles
+            isScrolled ? "text-foreground" : "text-foreground",
+            // Hover states
+            isScrolled ? "hover:bg-secondary hover:text-mongodb-green" : "hover:bg-secondary/50",
+            // Active states
+            isActive && "bg-secondary text-mongodb-green"
+        )}>
+            <Icon className="w-5 h-5 md:w-5 md:h-5" />
+            <span className="hidden md:inline text-sm font-bold uppercase tracking-wider">{label}</span>
+        </Link>
     )
 }

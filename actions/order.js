@@ -23,6 +23,12 @@ export async function createOrder(data) {
             link: `/admin/orders`, // In a real app, this might link to a specific order
         });
 
+        // Fire and forget CAPI event
+        // We import dynamically to avoid top-level issues if any
+        import("@/lib/facebook-capi").then(({ sendPurchaseEvent }) => {
+            sendPurchaseEvent(order).catch(err => console.error("CAPI Async Error:", err));
+        });
+
         return { success: true, order: JSON.parse(JSON.stringify(order)) };
     } catch (error) {
         console.error("Failed to create order:", error);

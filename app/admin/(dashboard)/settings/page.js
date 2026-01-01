@@ -18,6 +18,7 @@ export default function SettingsPage() {
         siteName: '',
         logoUrl: '',
         facebookPixelId: '',
+        facebookAccessToken: '',
         contactPhone: '',
         address: '',
         deliveryChargeInsideDhaka: 60,
@@ -130,6 +131,10 @@ export default function SettingsPage() {
                             <div className="grid gap-2">
                                 <Label>Facebook Pixel ID</Label>
                                 <Input name="facebookPixelId" value={formData.facebookPixelId} onChange={handleChange} placeholder="e.g. 1234567890" />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label>Facebook Access Token (CAPI)</Label>
+                                <Input type="password" name="facebookAccessToken" value={formData.facebookAccessToken || ''} onChange={handleChange} placeholder="Enter Facebook CAPI Access Token" />
                             </div>
                         </CardContent>
                     </Card>

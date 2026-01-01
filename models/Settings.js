@@ -5,6 +5,7 @@ const SettingsSchema = new mongoose.Schema({
     siteName: { type: String, default: 'My Shop' },
     logoUrl: { type: String, default: '' },
     facebookPixelId: { type: String, default: '' },
+    facebookAccessToken: { type: String, default: '' },
     contactPhone: { type: String, default: '' },
     address: { type: String, default: '' },
     facebookUrl: { type: String, default: '' },
