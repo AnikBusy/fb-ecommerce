@@ -147,7 +147,7 @@ export function OrderTable({ orders, pagination }) {
             )}
 
             <div className="rounded-md border overflow-x-auto">
-                <Table>
+                <Table className="min-w-[1000px]">
                     <TableHeader>
                         <TableRow>
                             <TableHead className="w-10">
