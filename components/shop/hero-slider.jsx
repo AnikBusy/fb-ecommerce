@@ -1,12 +1,11 @@
 'use client'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Autoplay, EffectFade, Navigation, Pagination } from 'swiper/modules'
+import { Autoplay, Navigation, Pagination } from 'swiper/modules'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Sparkles } from 'lucide-react'
 import { motion } from 'framer-motion'
 import 'swiper/css'
-import 'swiper/css/effect-fade'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 
@@ -31,8 +30,8 @@ export function HeroSlider() {
     return (
         <div className="relative h-[70vh] md:h-[90vh] w-full overflow-hidden bg-background">
             <Swiper
-                modules={[Autoplay, EffectFade, Navigation, Pagination]}
-                effect="fade"
+                modules={[Autoplay, Navigation, Pagination]}
+                grabCursor={true}
                 autoplay={{ delay: 6000, disableOnInteraction: false }}
                 loop={true}
                 pagination={{
