@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Minus, Plus, ShoppingBag } from "lucide-react"
 import Link from "next/link"
 import { formatCurrency } from "@/lib/utils"
+import { useState, useEffect } from "react"
 
 export function CartSheet() {
     const { cart, isOpen, setIsOpen, updateQuantity, removeFromCart, cartTotal } = useCart()
@@ -52,7 +53,10 @@ export function CartSheet() {
                                                 <button className="h-6 w-6 rounded-full flex items-center justify-center text-muted-foreground hover:text-mongodb-green hover:bg-background transition-all" onClick={() => updateQuantity(item.product._id, item.quantity - 1)}>
                                                     <Minus className="h-2.5 w-2.5" />
                                                 </button>
-                                                <span className="text-[10px] font-black w-6 text-center text-foreground">{item.quantity}</span>
+                                                <QuantityInput
+                                                    value={item.quantity}
+                                                    onUpdate={(val) => updateQuantity(item.product._id, val)}
+                                                />
                                                 <button className="h-6 w-6 rounded-full flex items-center justify-center text-muted-foreground hover:text-mongodb-green hover:bg-background transition-all" onClick={() => updateQuantity(item.product._id, item.quantity + 1)}>
                                                     <Plus className="h-2.5 w-2.5" />
                                                 </button>
@@ -81,5 +85,40 @@ export function CartSheet() {
                 )}
             </SheetContent>
         </Sheet>
+    )
+}
+
+function QuantityInput({ value, onUpdate }) {
+    const [localValue, setLocalValue] = useState(value)
+
+    useEffect(() => {
+        setLocalValue(value)
+    }, [value])
+
+    const handleBlur = () => {
+        const val = parseInt(localValue)
+        if (!isNaN(val) && val > 0) {
+            onUpdate(val)
+        } else {
+            setLocalValue(value) // Reset to prop value if invalid
+        }
+    }
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.target.blur()
+        }
+    }
+
+    return (
+        <input
+            type="number"
+            min="1"
+            className="w-8 bg-transparent text-center text-[10px] font-black text-foreground border-none focus:outline-none focus:ring-0 p-0 [&::-webkit-inner-spin-button]:appearance-none"
+            value={localValue}
+            onChange={(e) => setLocalValue(e.target.value)}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
+        />
     )
 }

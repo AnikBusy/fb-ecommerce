@@ -9,13 +9,13 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Loader2 } from "lucide-react"
+import { Loader2, Minus, Plus } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { formatCurrency } from "@/lib/utils"
 
 export function CheckoutForm() {
-    const { cart, cartTotal, clearCart } = useCart()
+    const { cart, cartTotal, clearCart, updateQuantity } = useCart()
     const [loading, setLoading] = useState(false)
     const [area, setArea] = useState('inside-dhaka')
     const [deliveryCharge, setDeliveryCharge] = useState(60)
@@ -136,9 +136,41 @@ export function CheckoutForm() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                     {cart.map(item => (
-                        <div key={item.product?._id || Math.random()} className="flex justify-between text-sm">
-                            <span>{item.product?.title || 'Unknown'} x {item.quantity}</span>
-                            <span>{formatCurrency((item.product?.discountPrice || item.product?.price || 0) * item.quantity)}</span>
+                        <div key={item.product?._id || Math.random()} className="flex gap-3 text-sm py-2">
+                            <div className="h-12 w-12 flex-shrink-0 bg-secondary/50 rounded-md overflow-hidden border border-border">
+                                {item.product.images && item.product.images[0] && (
+                                    <img src={item.product.images[0]} className="h-full w-full object-cover" alt={item.product.title} />
+                                )}
+                            </div>
+                            <div className="flex-1 space-y-1">
+                                <div className="flex justify-between items-start">
+                                    <span className="font-medium line-clamp-1 pr-2">{item.product?.title || 'Unknown'}</span>
+                                    <span className="font-medium whitespace-nowrap">{formatCurrency((item.product?.discountPrice || item.product?.price || 0) * item.quantity)}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <div className="flex items-center bg-secondary/50 rounded-full border border-border p-0.5 shadow-sm h-7">
+                                        <button
+                                            type="button"
+                                            className="h-6 w-6 rounded-full flex items-center justify-center text-muted-foreground hover:text-mongodb-green hover:bg-background transition-all"
+                                            onClick={() => updateQuantity(item.product._id, item.quantity - 1)}
+                                        >
+                                            <Minus className="h-2.5 w-2.5" />
+                                        </button>
+                                        <QuantityInput
+                                            value={item.quantity}
+                                            onUpdate={(val) => updateQuantity(item.product._id, val)}
+                                        />
+                                        <button
+                                            type="button"
+                                            className="h-6 w-6 rounded-full flex items-center justify-center text-muted-foreground hover:text-mongodb-green hover:bg-background transition-all"
+                                            onClick={() => updateQuantity(item.product._id, item.quantity + 1)}
+                                        >
+                                            <Plus className="h-2.5 w-2.5" />
+                                        </button>
+                                    </div>
+                                    <span className="text-xs text-muted-foreground">x {formatCurrency(item.product?.discountPrice || item.product?.price || 0)}</span>
+                                </div>
+                            </div>
                         </div>
                     ))}
                     <div className="border-t pt-4 flex justify-between">
@@ -162,5 +194,41 @@ export function CheckoutForm() {
                 </CardFooter>
             </Card>
         </form>
+    )
+}
+
+function QuantityInput({ value, onUpdate }) {
+    const [localValue, setLocalValue] = useState(value)
+
+    useEffect(() => {
+        setLocalValue(value)
+    }, [value])
+
+    const handleBlur = () => {
+        const val = parseInt(localValue)
+        if (!isNaN(val) && val > 0) {
+            onUpdate(val)
+        } else {
+            setLocalValue(value)
+        }
+    }
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault() // Prevent form submission
+            e.target.blur()
+        }
+    }
+
+    return (
+        <input
+            type="number"
+            min="1"
+            className="w-8 bg-transparent text-center text-[10px] font-black text-foreground border-none focus:outline-none focus:ring-0 p-0 [&::-webkit-inner-spin-button]:appearance-none"
+            value={localValue}
+            onChange={(e) => setLocalValue(e.target.value)}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
+        />
     )
 }
