@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic';
 export default async function HomePage() {
     const [banners, allProducts, categories] = await Promise.all([
         getBanners({ isActive: true }),
-        getProducts(),
+        getProducts({ isActive: true }),
         getCategories()
     ])
 
@@ -185,15 +185,15 @@ export default async function HomePage() {
                 {/* 7. Final Call to Action */}
                 <div className="flex flex-col items-center gap-6 md:gap-10 py-5 md:py-24 relative">
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-16 md:h-32 bg-gradient-to-b from-transparent via-border to-transparent"></div>
-                    <Button asChild size="lg" className="rounded-full bg-mongodb-green text-mongodb-dark hover:bg-[#00FF6C] px-8 md:px-16 h-14 md:h-20 font-black uppercase tracking-[0.2em] text-xs shadow-xl transition-all active:scale-95 group border-none">
+                    <Button asChild size="lg" className="rounded-full bg-mongodb-green text-mongodb-dark hover:bg-[#00FF6C] px-8 md:px-16 h-12 md:h-20 font-black uppercase tracking-[0.2em] text-xs shadow-xl transition-all active:scale-95 group border-none">
                         <Link href="/shop" className="flex items-center gap-4">
                             Explore All Products
                             <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                         </Link>
                     </Button>
                     <div className="text-center space-y-1.5 opacity-60">
-                        <p className="text-[10px] font-black uppercase tracking-[0.4em] shop-text">Elite Craftsmanship</p>
-                        <p className="text-[8px] font-bold uppercase tracking-[0.2em] shop-muted italic">Global Shipment Available</p>
+                        <p className="text-[10px] font-black uppercase tracking-[0.4em] shop-text">Cash On </p>
+                        <p className="text-[8px] font-bold uppercase tracking-[0.2em] shop-muted italic">Delivery Available</p>
                     </div>
                 </div>
             </div>

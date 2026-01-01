@@ -32,7 +32,8 @@ export function ProductDialog({ categories, product, trigger }) {
         description: product?.description || '',
         isFeatured: product?.isFeatured || false,
         isBestSelling: product?.isBestSelling || false,
-        isPromotional: product?.isPromotional || false
+        isPromotional: product?.isPromotional || false,
+        isActive: product?.isActive ?? true
     })
 
     const router = useRouter()
@@ -50,7 +51,8 @@ export function ProductDialog({ categories, product, trigger }) {
                 description: product.description || '',
                 isFeatured: product.isFeatured || false,
                 isBestSelling: product.isBestSelling || false,
-                isPromotional: product.isPromotional || false
+                isPromotional: product.isPromotional || false,
+                isActive: product.isActive ?? true
             })
         }
     }, [product])
@@ -102,6 +104,7 @@ export function ProductDialog({ categories, product, trigger }) {
             isFeatured: form.get('isFeatured') === 'on',
             isBestSelling: form.get('isBestSelling') === 'on',
             isPromotional: form.get('isPromotional') === 'on',
+            isActive: form.get('isActive') === 'on',
         }
 
         const res = isEdit
@@ -122,7 +125,9 @@ export function ProductDialog({ categories, product, trigger }) {
                     description: '',
                     isFeatured: false,
                     isBestSelling: false,
-                    isPromotional: false
+                    isBestSelling: false,
+                    isPromotional: false,
+                    isActive: true
                 })
             }
             toast.success(`Product ${isEdit ? 'updated' : 'created'} successfully!`)
@@ -183,7 +188,11 @@ export function ProductDialog({ categories, product, trigger }) {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-4 border p-4 rounded-lg bg-zinc-50/50">
+                    <div className="grid grid-cols-2 gap-4 border p-4 rounded-lg bg-zinc-50/50">
+                        <div className="flex items-center space-x-2">
+                            <input type="checkbox" id="isActive" name="isActive" checked={formData.isActive} onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })} className="h-4 w-4 rounded border-zinc-300" />
+                            <Label htmlFor="isActive" className="text-xs font-bold uppercase tracking-tight text-mongodb-green">Active (Visible)</Label>
+                        </div>
                         <div className="flex items-center space-x-2">
                             <input type="checkbox" id="isFeatured" name="isFeatured" checked={formData.isFeatured} onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })} className="h-4 w-4 rounded border-zinc-300" />
                             <Label htmlFor="isFeatured" className="text-xs font-bold uppercase tracking-tight">Featured</Label>

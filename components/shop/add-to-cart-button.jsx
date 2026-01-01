@@ -34,7 +34,7 @@ export function AddToCartButton({ product, variant = "default", size = "default"
                 size="icon"
                 onClick={handleAction}
                 disabled={loading}
-                className={cn("h-12 w-12", className)}
+                className={cn("h-10 w-10")}
             >
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShoppingCart className="h-4 w-4" />}
             </Button>
@@ -68,7 +68,7 @@ export function AddToCartButton({ product, variant = "default", size = "default"
             )}
         >
             {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ShoppingCart className="mr-2 h-4 w-4" />}
-            Add to Cart
+            BUY
         </Button>
     )
 }

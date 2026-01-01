@@ -8,7 +8,7 @@ import { Filter, Grid3X3, List } from "lucide-react"
 export const dynamic = 'force-dynamic';
 
 export default async function ShopPage() {
-    const products = await getProducts()
+    const products = await getProducts({ isActive: true })
     const categories = await getCategories()
 
     // Serialize to plain objects for client components

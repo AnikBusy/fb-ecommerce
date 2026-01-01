@@ -109,7 +109,7 @@ export function QuickOrderForm({ product, cart, total: cartTotal }) {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="shop-card-bg border rounded-[2.5rem] p-8 md:p-10 space-y-8 shadow-md relative overflow-hidden">
+        <form onSubmit={handleSubmit} className="shop-card-bg border rounded-xl p-8 md:p-10 space-y-8 shadow-md relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-mongodb-green/5 rounded-full blur-3xl pointer-events-none"></div>
 
             <div className="flex items-center gap-4 mb-2 relative">
@@ -181,12 +181,12 @@ export function QuickOrderForm({ product, cart, total: cartTotal }) {
                 <div className="grid gap-3">
                     <div className="flex items-center gap-2 mb-1">
                         <Zap className="w-3 h-3 text-mongodb-green" />
-                        <Label htmlFor="orderNote" className="text-[10px] font-black uppercase tracking-widest shop-muted">Customer Note (Size/Color)</Label>
+                        <Label htmlFor="orderNote" className="text-[10px] font-black uppercase tracking-widest shop-muted">Customer Note</Label>
                     </div>
                     <Input
                         id="orderNote"
                         name="orderNote"
-                        placeholder="e.g. Size: XL, Color: Black"
+                        placeholder=""
                         onBlur={handleAutoSave}
                         className="h-14 rounded-2xl border-border bg-secondary/30 shop-text placeholder:text-muted-foreground focus:border-mongodb-green focus:bg-card transition-all shadow-sm px-6"
                     />

@@ -109,8 +109,8 @@ export function CheckoutForm() {
                         <Textarea id="address" name="address" required placeholder="House, Road, Area..." />
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="orderNote">Customer Note (Size/Color)</Label>
-                        <Textarea id="orderNote" name="orderNote" placeholder="e.g. Size: XL, Color: Black" />
+                        <Label htmlFor="orderNote">Customer Note</Label>
+                        <Textarea id="orderNote" name="orderNote" placeholder="" />
                     </div>
                     <div className="grid gap-2">
                         <Label>Delivery Area</Label>

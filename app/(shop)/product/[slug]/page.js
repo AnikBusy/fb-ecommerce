@@ -28,7 +28,8 @@ export default async function ProductPage({ params }) {
 
     const relatedProducts = await getProducts({
         category: product.category?._id,
-        _id: { $ne: product._id }
+        _id: { $ne: product._id },
+        isActive: true
     }).then(list => list.slice(0, 4))
 
     // Serialize to plain objects for client components
@@ -37,9 +38,9 @@ export default async function ProductPage({ params }) {
 
     return (
         <div className="bg-background min-h-screen md:pb-32 pb-10">
-            <div className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] py-4 md:py-24 px-4 md:px-0">
+            <div className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] px-4 md:px-0">
                 {/* Breadcrumb / Back */}
-                <Link href="/shop" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest shop-muted hover:text-mongodb-green transition-colors mb-16 group">
+                <Link href="/shop" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest shop-muted hover:text-mongodb-green transition-colors mb-6 md:mb-10 group">
                     <ArrowLeft className="w-3 h-3 transition-transform group-hover:-translate-x-1" />
                     Back to Collection
                 </Link>
@@ -96,7 +97,7 @@ export default async function ProductPage({ params }) {
                 {/* Second Row: Details & Order Form */}
                 <div className="mt-20 grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
                     {/* Left Column: Product Details */}
-                    <div className="space-y-8">
+                    <div className="space-y-8 ">
                         <div className="flex items-center gap-4 pb-6 border-b border-white/5">
                             <div className="h-12 w-12 rounded-2xl bg-mongodb-green/10 flex items-center justify-center border border-mongodb-green/20">
                                 <Package className="w-6 h-6 text-mongodb-green" />
@@ -104,7 +105,7 @@ export default async function ProductPage({ params }) {
                             <h2 className="text-xl md:text-2xl font-black uppercase tracking-tighter shop-text">Product Details</h2>
                         </div>
 
-                        <div className="shop-card-bg rounded-xl p-8 border shadow-sm">
+                        <div className="shop-card-bg rounded-xl md:p-8 p-6 border shadow-sm">
                             <div className="prose prose-invert max-w-none">
                                 <div className="shop-text text-base leading-relaxed whitespace-pre-line">
                                     {serializedProduct.description}
@@ -118,13 +119,13 @@ export default async function ProductPage({ params }) {
                         {/* Quick Order Form */}
                         <QuickOrderForm product={serializedProduct} />
 
-                        <div className="space-y-6">
-                            <AddToCartButton product={serializedProduct} className="w-full h-20 rounded-full text-[10px] uppercase tracking-[0.3em] font-black shadow-lg" />
-                            <div className="flex items-center justify-center gap-3 text-[9px] font-black shop-muted uppercase tracking-[0.3em]">
-                                <RefreshCcw className="w-4 h-4 opacity-30" />
-                                <span>7 Day Replacement Assurance</span>
-                            </div>
+                        <div className="fixed bottom-6 right-6 z-50 md:static md:block">
+                            <AddToCartButton
+                                product={serializedProduct}
+                                className="w-auto px-8 md:w-full h-16 md:h-20 rounded-full text-[10px] uppercase tracking-[0.3em] font-black shadow-2xl md:shadow-lg bg-mongodb-green  hover:bg-[#00FF6C] transition-all hover:scale-105 active:scale-95"
+                            />
                         </div>
+
                     </div>
                 </div>
 
