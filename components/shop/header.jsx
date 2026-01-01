@@ -44,7 +44,7 @@ export function Header({ categories }) {
                                 <Menu className="w-6 h-6" />
                             </button>
                         </SheetTrigger>
-                        <SheetContent side="left" className="p-0 border-r border-zinc-100 dark:border-zinc-800 w-[50vw] sm:w-[300px]">
+                        <SheetContent side="left" className="p-0 border-r border-zinc-100 dark:border-zinc-800 w-[65vw] sm:w-[300px]">
                             <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                             <div className="h-full flex flex-col">
                                 <div className="p-6 border-b border-zinc-100 dark:border-zinc-900">

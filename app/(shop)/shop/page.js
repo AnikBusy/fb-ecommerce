@@ -21,8 +21,8 @@ export default async function ShopPage() {
             <div className="flex flex-col gap-12 md:gap-20">
                 {/* Header Section */}
                 <div className="space-y-3">
-                    <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tighter shop-text">Full Collection</h1>
-                    <p className="shop-muted text-xs md:text-base max-w-xl italic font-medium leading-relaxed">Explore our premium selection of quality items curated for style and durability.</p>
+                    <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tighter shop-text">All Collection</h1>
+                    <p className="shop-muted text-xs md:text-base max-w-xl italic font-medium leading-relaxed">Explore our items</p>
                 </div>
 
                 <div className="grid lg:grid-cols-4 gap-12 md:gap-20">
