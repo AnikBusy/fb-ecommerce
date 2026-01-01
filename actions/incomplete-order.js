@@ -29,20 +29,7 @@ export async function getIncompleteOrders() {
             .sort({ updatedAt: -1 })
             .lean()
 
-        return orders.map(order => ({
-            ...order,
-            _id: order._id.toString(),
-            createdAt: order.createdAt.toISOString(),
-            updatedAt: order.updatedAt.toISOString(),
-            products: order.products.map(p => ({
-                ...p,
-                product: p.product ? {
-                    ...p.product,
-                    _id: p.product._id.toString()
-                } : null,
-                _id: p._id ? p._id.toString() : undefined
-            }))
-        }))
+        return JSON.parse(JSON.stringify(orders))
     } catch (error) {
         console.error("Failed to fetch incomplete orders:", error)
         return []
