@@ -19,8 +19,4 @@ const PageSchema = new mongoose.Schema({
 });
 
 // Force delete the old model to ensure schema updates
-if (mongoose.models.Page) {
-    delete mongoose.models.Page;
-}
-
-export default mongoose.model('Page', PageSchema);
+export default mongoose.models.Page || mongoose.model('Page', PageSchema);

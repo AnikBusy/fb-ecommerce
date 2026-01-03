@@ -12,69 +12,144 @@ export async function getDashboardStats() {
     const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-    // Fetch all orders to process metrics
-    // Optimization: In a real large-scale app, use aggregation pipelines.
-    const orders = await Order.find({}).lean();
+    // Use aggregation for optimized stats fetching
+    const [stats] = await Order.aggregate([
+        {
+            $facet: {
+                overall: [
+                    {
+                        $group: {
+                            _id: null,
+                            totalOrders: { $sum: 1 },
+                            totalRevenue: {
+                                $sum: {
+                                    $cond: [
+                                        { $and: [{ $ne: ["$status", "cancelled"] }, { $ne: ["$status", "returned"] }] },
+                                        "$totalAmount",
+                                        0
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                ],
+                today: [
+                    { $match: { createdAt: { $gte: startOfDay } } },
+                    {
+                        $group: {
+                            _id: null,
+                            count: { $sum: 1 },
+                            revenue: {
+                                $sum: {
+                                    $cond: [
+                                        { $and: [{ $ne: ["$status", "cancelled"] }, { $ne: ["$status", "returned"] }] },
+                                        "$totalAmount",
+                                        0
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                ],
+                thisMonth: [
+                    { $match: { createdAt: { $gte: startOfMonth } } },
+                    {
+                        $group: {
+                            _id: null,
+                            count: { $sum: 1 },
+                            revenue: {
+                                $sum: {
+                                    $cond: [
+                                        { $and: [{ $ne: ["$status", "cancelled"] }, { $ne: ["$status", "returned"] }] },
+                                        "$totalAmount",
+                                        0
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                ],
+                statusCounts: [
+                    {
+                        $group: {
+                            _id: "$status",
+                            count: { $sum: 1 }
+                        }
+                    }
+                ],
+                monthlyGraph: [
+                    {
+                        $match: {
+                            createdAt: {
+                                $gte: new Date(now.getFullYear(), 0, 1) // Start of current year
+                            }
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: { $month: "$createdAt" },
+                            orders: { $sum: 1 },
+                            revenue: {
+                                $sum: {
+                                    $cond: [
+                                        { $and: [{ $ne: ["$status", "cancelled"] }, { $ne: ["$status", "returned"] }] },
+                                        "$totalAmount",
+                                        0
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    { $sort: { "_id": 1 } }
+                ]
+            }
+        }
+    ]);
 
-    // 1. Today's Sales
-    const todayOrders = orders.filter(o => new Date(o.createdAt) >= startOfDay);
-    const todayRevenue = todayOrders
-        .filter(o => o.status !== 'cancelled' && o.status !== 'returned')
-        .reduce((sum, o) => sum + o.totalAmount, 0);
-
-    // 2. Monthly Sales
-    const monthOrders = orders.filter(o => new Date(o.createdAt) >= startOfMonth);
-    const monthRevenue = monthOrders
-        .filter(o => o.status !== 'cancelled' && o.status !== 'returned')
-        .reduce((sum, o) => sum + o.totalAmount, 0);
-
-    // 3. Status Counts
-    const statusCounts = {
-        pending: orders.filter(o => o.status === 'pending').length,
-        confirmed: orders.filter(o => o.status === 'confirmed').length,
-        shipped: orders.filter(o => o.status === 'shipped').length,
-        delivered: orders.filter(o => o.status === 'delivered').length,
-        cancelled: orders.filter(o => o.status === 'cancelled').length,
-        returned: orders.filter(o => o.status === 'returned').length,
+    // Format status counts
+    const statusMap = {
+        pending: 0,
+        confirmed: 0,
+        shipped: 0,
+        delivered: 0,
+        cancelled: 0,
+        returned: 0
     };
+    stats.statusCounts.forEach(s => {
+        if (statusMap.hasOwnProperty(s._id)) {
+            statusMap[s._id] = s.count;
+        }
+    });
 
-    // 4. Recent Orders (Last 5)
-    // We fetch this efficiently from DB
+    // Format monthly graph data
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const monthlyData = months.map((name, index) => {
+        const monthStats = stats.monthlyGraph.find(m => m._id === index + 1);
+        return {
+            name,
+            orders: monthStats ? monthStats.orders : 0,
+            revenue: monthStats ? monthStats.revenue : 0
+        };
+    });
+
+    // Fetch recent orders separately (easier than facet for this)
     const recentOrders = await Order.find({})
         .sort({ createdAt: -1 })
         .limit(5)
         .lean();
 
-    // 5. Monthly Orders Graph (Jan-Dec)
-    const currentYear = new Date().getFullYear();
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-    // Initialize with 0
-    const monthlyData = months.map(name => ({ name, orders: 0, revenue: 0 }));
-
-    orders.forEach(order => {
-        const d = new Date(order.createdAt);
-        if (d.getFullYear() === currentYear) {
-            const mIdx = d.getMonth();
-            monthlyData[mIdx].orders += 1;
-
-            // Add revenue if not cancelled/returned
-            if (order.status !== 'cancelled' && order.status !== 'returned') {
-                monthlyData[mIdx].revenue += order.totalAmount;
-            }
-        }
-    });
+    const overall = stats.overall[0] || { totalOrders: 0, totalRevenue: 0 };
+    const today = stats.today[0] || { count: 0, revenue: 0 };
+    const thisMonth = stats.thisMonth[0] || { count: 0, revenue: 0 };
 
     return {
-        totalOrders: orders.length,
-        totalRevenue: orders
-            .filter(o => o.status !== 'cancelled' && o.status !== 'returned')
-            .reduce((sum, o) => sum + o.totalAmount, 0),
-        todayRevenue,
-        todayOrdersCount: todayOrders.length,
-        monthRevenue,
-        monthOrdersCount: monthOrders.length,
-        statusCounts,
+        totalOrders: overall.totalOrders,
+        totalRevenue: overall.totalRevenue,
+        todayRevenue: today.revenue,
+        todayOrdersCount: today.count,
+        monthRevenue: thisMonth.revenue,
+        monthOrdersCount: thisMonth.count,
+        statusCounts: statusMap,
         recentOrders: JSON.parse(JSON.stringify(recentOrders)),
         monthlyOrdersGraph: monthlyData
     };

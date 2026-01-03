@@ -12,7 +12,7 @@ export function AdminProfileSection({ admin }) {
             <div className="flex items-center gap-3 px-2 py-1">
                 <Avatar className="h-9 w-9 border border-zinc-200 dark:border-zinc-800">
                     <AvatarImage src={admin.image} alt={admin.username} className="object-cover" />
-                    <AvatarFallback className="bg-mongodb-green/10 text-mongodb-green">
+                    <AvatarFallback className="bg-primary/10 text-primary">
                         {admin.username?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                 </Avatar>

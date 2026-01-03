@@ -27,7 +27,7 @@ export default async function RootLayout({ children }) {
   const settings = await getSettings();
 
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" className="light" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}
       >

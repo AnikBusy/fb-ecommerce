@@ -4,51 +4,26 @@
 
 @layer base {
   :root {
-    /* =========================================
-       EDIT THESE COLORS TO CHANGE THE THEME
-       ========================================= */
-    --brand-primary: #00ED64;
-    /* The main highlight color (Green) */
-    --brand-dark: #001E2B;
-    /* The main background color */
-    --brand-dark-card: #002333;
-    /* The color for cards and sections */
-    --text-main: #FFFFFF;
-    /* Main text color */
-    --text-muted: #8899A1;
-    /* Muted/secondary text color */
-    --border-color: rgba(255, 255, 255, 0.1);
-    /* Border color */
-
-    /* Generic system variables (linked to the above) */
-    --background: 185 100% 4.5%;
-    /* Map to brand-dark approx */
-    --foreground: 0 0% 100%;
-    --card: 185 100% 6%;
-    --card-foreground: 0 0% 100%;
-    --primary: 161 100% 46%;
-    --primary-foreground: 185 100% 5%;
-    --secondary: 185 100% 10%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 185 100% 10%;
-    --muted-foreground: 185 20% 65%;
-    --accent: 145 100% 20%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 185 100% 12%;
-    --input: 185 100% 12%;
-    --ring: 161 100% 46%;
-    --popover: 185 100% 6%;
-    --popover-foreground: 0 0% 100%;
-    --radius: 1rem;
-
-    /* Shop specifics */
-    --shop-bg: var(--brand-dark);
-    --shop-card: var(--brand-dark-card);
-    --shop-text: var(--text-main);
-    --shop-muted: var(--text-muted);
-    --shop-border: var(--border-color);
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 29 100% 56%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --radius: 0.5rem;
   }
 }
 
@@ -57,32 +32,17 @@
     @apply border-border outline-ring/50;
   }
 
+  html,
+  body {
+    @apply h-full;
+  }
+
   body {
     @apply bg-background text-foreground transition-colors duration-300;
-    background-color: var(--brand-dark);
-    color: var(--text-main);
   }
 }
 
 @layer utilities {
-
-  /* Dynamic utilities linked to your variables above */
-  .bg-mongodb-dark {
-    background-color: var(--brand-dark);
-  }
-
-  .bg-mongodb-green {
-    background-color: var(--brand-primary);
-  }
-
-  .text-mongodb-green {
-    color: var(--brand-primary);
-  }
-
-  .text-mongodb-dark {
-    color: var(--brand-dark);
-  }
-
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
@@ -103,14 +63,11 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    border: 2px solid transparent;
-    background-clip: padding-box;
+    @apply bg-muted-foreground/20 rounded-full border-2 border-transparent bg-clip-padding;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.2);
+    @apply bg-muted-foreground/30;
   }
 }
 
@@ -118,31 +75,9 @@
 
   /* High-Contrast Glassmorphism */
   .glass {
-    @apply backdrop-blur-xl border shadow-2xl;
-    background-color: var(--brand-dark-card);
-    opacity: 1;
-    /* Match user request for non-transparent data */
-    border-color: var(--border-color);
+    @apply backdrop-blur-xl border border-border/50 bg-card/80 shadow-2xl;
   }
 
-  .shop-container-bg {
-    background-color: var(--brand-dark);
-    color: var(--text-main);
-  }
-
-  .shop-card-bg {
-    background-color: var(--brand-dark-card);
-    border: 1px solid var(--border-color);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  }
-
-  .shop-text {
-    color: var(--text-main);
-  }
-
-  .shop-muted {
-    color: var(--text-muted);
-  }
 }
 
 @keyframes fade-in-up {

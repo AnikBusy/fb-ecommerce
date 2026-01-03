@@ -10,6 +10,13 @@ import { useState, useEffect } from "react"
 
 export function CartSheet() {
     const { cart, isOpen, setIsOpen, updateQuantity, removeFromCart, cartTotal } = useCart()
+    const [mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    if (!mounted) return null
 
     return (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -35,13 +42,13 @@ export function CartSheet() {
                         <div className="space-y-6">
                             {cart.map(item => (
                                 <div key={item.product._id} className="flex gap-4 group">
-                                    <div className="h-16 w-16 flex-shrink-0 bg-secondary/50 rounded-xl overflow-hidden border border-border group-hover:border-mongodb-green/50 transition-all shadow-sm">
+                                    <div className="h-16 w-16 flex-shrink-0 bg-secondary/50 rounded-xl overflow-hidden border border-border group-hover:border-primary/50 transition-all shadow-sm">
                                         {item.product.images && item.product.images[0] && (
                                             <img src={item.product.images[0]} className="h-full w-full object-cover transition-all group-hover:scale-110" alt={item.product.title} />
                                         )}
                                     </div>
                                     <div className="flex-1 space-y-1.5">
-                                        <h4 className="font-bold text-sm text-foreground line-clamp-1 group-hover:text-mongodb-green transition-colors">{item.product?.title || 'Unknown Item'}</h4>
+                                        <h4 className="font-bold text-sm text-foreground line-clamp-1 group-hover:text-primary transition-colors">{item.product?.title || 'Unknown Item'}</h4>
                                         <div className="flex items-center gap-3">
                                             <span className="text-sm font-black text-foreground italic">{formatCurrency(item.product?.discountPrice || item.product?.price || 0)}</span>
                                             {item.product?.discountPrice > 0 && (
@@ -50,14 +57,14 @@ export function CartSheet() {
                                         </div>
                                         <div className="flex items-center gap-3">
                                             <div className="flex items-center bg-secondary/50 rounded-full border border-border p-0.5 shadow-sm">
-                                                <button className="h-6 w-6 rounded-full flex items-center justify-center text-muted-foreground hover:text-mongodb-green hover:bg-background transition-all" onClick={() => updateQuantity(item.product._id, item.quantity - 1)}>
+                                                <button className="h-6 w-6 rounded-full flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-background transition-all" onClick={() => updateQuantity(item.product._id, item.quantity - 1)}>
                                                     <Minus className="h-2.5 w-2.5" />
                                                 </button>
                                                 <QuantityInput
                                                     value={item.quantity}
                                                     onUpdate={(val) => updateQuantity(item.product._id, val)}
                                                 />
-                                                <button className="h-6 w-6 rounded-full flex items-center justify-center text-muted-foreground hover:text-mongodb-green hover:bg-background transition-all" onClick={() => updateQuantity(item.product._id, item.quantity + 1)}>
+                                                <button className="h-6 w-6 rounded-full flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-background transition-all" onClick={() => updateQuantity(item.product._id, item.quantity + 1)}>
                                                     <Plus className="h-2.5 w-2.5" />
                                                 </button>
                                             </div>
@@ -78,7 +85,7 @@ export function CartSheet() {
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Subtotal</span>
                             <span className="text-2xl font-black text-foreground italic tracking-tighter drop-shadow-sm">{formatCurrency(cartTotal)}</span>
                         </div>
-                        <Button className="w-full h-14 bg-mongodb-green hover:bg-[#00FF6C] text-mongodb-dark rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-xl transition-all active:scale-95 border-none" asChild onClick={() => setIsOpen(false)}>
+                        <Button className="w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-xl transition-all active:scale-95 border-none" asChild onClick={() => setIsOpen(false)}>
                             <Link href="/checkout">Checkout</Link>
                         </Button>
                     </div>

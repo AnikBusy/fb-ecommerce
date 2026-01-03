@@ -191,7 +191,7 @@ export function ProductDialog({ categories, product, trigger }) {
                     <div className="grid grid-cols-2 gap-4 border p-4 rounded-lg bg-zinc-50/50">
                         <div className="flex items-center space-x-2">
                             <input type="checkbox" id="isActive" name="isActive" checked={formData.isActive} onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })} className="h-4 w-4 rounded border-zinc-300" />
-                            <Label htmlFor="isActive" className="text-xs font-bold uppercase tracking-tight text-mongodb-green">Active (Visible)</Label>
+                            <Label htmlFor="isActive" className="text-xs font-bold uppercase tracking-tight text-primary">Active (Visible)</Label>
                         </div>
                         <div className="flex items-center space-x-2">
                             <input type="checkbox" id="isFeatured" name="isFeatured" checked={formData.isFeatured} onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })} className="h-4 w-4 rounded border-zinc-300" />

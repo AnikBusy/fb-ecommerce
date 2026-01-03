@@ -41,17 +41,17 @@ export default async function CategoryPage({ params }) {
             <div className="flex flex-col gap-12 md:gap-20">
                 {/* Header Section */}
                 <div className="space-y-8">
-                    <Link href="/shop" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-mongodb-green hover:text-white transition-colors group">
+                    <Link href="/shop" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-primary hover:text-foreground transition-colors group">
                         <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
                         Back to Shop
                     </Link>
                     <div className="space-y-6">
-                        <div className="flex items-center gap-3 text-mongodb-green">
+                        <div className="flex items-center gap-3 text-primary">
                             <Sparkles className="w-5 h-5" />
                             <span className="text-[10px] font-black tracking-[0.5em] uppercase">COLLECTION</span>
                         </div>
-                        <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tighter shop-text leading-none">{category.name}</h1>
-                        <p className="shop-muted text-sm md:text-lg max-w-2xl italic font-medium leading-relaxed">
+                        <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-foreground leading-none">{category.name}</h1>
+                        <p className="text-muted-foreground text-sm md:text-lg max-w-2xl italic font-medium leading-relaxed">
                             Displaying {serializedProducts.length} elite items from the {category.name} manifest. Curated for performance and durability.
                         </p>
                     </div>
@@ -60,13 +60,13 @@ export default async function CategoryPage({ params }) {
                 <div className="grid lg:grid-cols-4 gap-12 md:gap-20">
                     {/* Sidebar Filters */}
                     <aside className="hidden lg:block h-fit sticky top-24">
-                        <div className="rounded-2xl border border-zinc-100 dark:border-zinc-800 overflow-hidden">
+                        <div className="rounded-2xl border border-border overflow-hidden">
                             <CategorySidebar categories={serializedCategories} />
                         </div>
 
-                        <div className="mt-8 p-8 rounded-[2rem] bg-mongodb-dark/50 border border-white/5 shadow-sm backdrop-blur-sm">
-                            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-mongodb-green/60 mb-6">Quality Assurance</h4>
-                            <p className="text-xs shop-muted leading-relaxed italic font-medium">Every item in this collection is handpicked and quality verified for the flux community.</p>
+                        <div className="mt-8 p-8 rounded-[2rem] bg-accent/50 border border-border shadow-sm backdrop-blur-sm">
+                            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-primary/60 mb-6">Quality Assurance</h4>
+                            <p className="text-xs text-muted-foreground leading-relaxed italic font-medium">Every item in this collection is handpicked and quality verified for the flux community.</p>
                         </div>
                     </aside>
 
@@ -81,7 +81,7 @@ export default async function CategoryPage({ params }) {
                         {serializedProducts.length === 0 && (
                             <div className="py-32 text-center rounded-[3rem] border border-dashed border-zinc-200">
                                 <p className="text-zinc-300 font-black italic uppercase tracking-[0.4em]">Cluster currently empty.</p>
-                                <Link href="/shop" className="inline-block mt-8 text-[10px] font-black text-mongodb-green uppercase tracking-widest border-b border-mongodb-green pb-1 hover:border-white hover:text-white transition-all">Return to Stream</Link>
+                                <Link href="/shop" className="inline-block mt-8 text-[10px] font-black text-primary uppercase tracking-widest border-b border-primary pb-1 hover:border-foreground hover:text-foreground transition-all">Return to Stream</Link>
                             </div>
                         )}
                     </div>

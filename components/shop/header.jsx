@@ -6,7 +6,7 @@ import { useCart } from "@/providers/cart-provider"
 import { useSettings } from "@/providers/settings-provider"
 import { ShoppingBag, Home, ShoppingCart, Menu } from "lucide-react"
 import { motion, useScroll, useMotionValueEvent } from "framer-motion"
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { cn } from "@/lib/utils"
 import { CartSheet } from "./cart-sheet"
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
@@ -25,6 +25,11 @@ export function Header({ categories }) {
     const cartCount = cart?.reduce((acc, item) => acc + item.quantity, 0) || 0
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+    const [mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
 
     return (
         <motion.header
@@ -38,29 +43,35 @@ export function Header({ categories }) {
             <div className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] h-full px-4 md:px-0 flex items-center justify-between">
                 <div className="flex items-center gap-4">
                     {/* Mobile Menu Toggle */}
-                    <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-                        <SheetTrigger asChild>
-                            <button className="md:hidden p-2 text-foreground hover:bg-secondary/50 rounded-full transition-colors">
-                                <Menu className="w-6 h-6" />
-                            </button>
-                        </SheetTrigger>
-                        <SheetContent side="left" className="p-0 border-r border-zinc-100 dark:border-zinc-800 w-[65vw] sm:w-[300px]">
-                            <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-                            <div className="h-full flex flex-col">
-                                <div className="p-6 border-b border-zinc-100 dark:border-zinc-900">
-                                    <span className="text-xl font-black uppercase tracking-tighter">
-                                        {settings?.siteName?.toUpperCase() || 'MY SHOP'}<span className="text-mongodb-green">.</span>
-                                    </span>
+                    {mounted ? (
+                        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+                            <SheetTrigger asChild>
+                                <button className="md:hidden p-2 text-foreground hover:bg-secondary/50 rounded-full transition-colors">
+                                    <Menu className="w-6 h-6" />
+                                </button>
+                            </SheetTrigger>
+                            <SheetContent side="left" className="p-0 border-r border-zinc-100 dark:border-zinc-800 w-[65vw] sm:w-[300px]">
+                                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+                                <div className="h-full flex flex-col">
+                                    <div className="p-6 border-b border-zinc-100 dark:border-zinc-900">
+                                        <span className="text-xl font-black uppercase tracking-tighter">
+                                            {settings?.siteName?.toUpperCase() || 'MY SHOP'}<span className="text-primary">.</span>
+                                        </span>
+                                    </div>
+                                    <div className="flex-1 overflow-hidden">
+                                        <CategorySidebar
+                                            categories={categories || []}
+                                            onSelect={() => setIsMobileMenuOpen(false)}
+                                        />
+                                    </div>
                                 </div>
-                                <div className="flex-1 overflow-hidden">
-                                    <CategorySidebar
-                                        categories={categories || []}
-                                        onSelect={() => setIsMobileMenuOpen(false)}
-                                    />
-                                </div>
-                            </div>
-                        </SheetContent>
-                    </Sheet>
+                            </SheetContent>
+                        </Sheet>
+                    ) : (
+                        <button className="md:hidden p-2 text-foreground hover:bg-secondary/50 rounded-full transition-colors opacity-50" disabled>
+                            <Menu className="w-6 h-6" />
+                        </button>
+                    )}
 
                     {/* Logo - Hide on mobile if space is tight, currently visible */}
                     <Link href="/" className="flex items-center gap-2 group">
@@ -68,7 +79,7 @@ export function Header({ categories }) {
                             <img src={settings.logoUrl} alt="Logo" className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
                         ) : (
                             <span className="text-xl md:text-2xl font-black tracking-tighter uppercase transition-colors duration-300 text-foreground">
-                                {settings?.siteName?.toUpperCase() || 'MY SHOP'}<span className="text-mongodb-green">.</span>
+                                {settings?.siteName?.toUpperCase() || 'MY SHOP'}<span className="text-primary">.</span>
                             </span>
                         )}
                     </Link>
@@ -84,14 +95,14 @@ export function Header({ categories }) {
                         className={cn(
                             "relative flex items-center gap-2 px-3 py-2 rounded-full transition-colors",
                             isScrolled
-                                ? "text-foreground hover:bg-secondary hover:text-mongodb-green"
+                                ? "text-foreground hover:bg-secondary hover:text-primary"
                                 : "text-foreground hover:bg-secondary/50"
                         )}>
                         <ShoppingCart className="w-5 h-5 md:w-5 md:h-5" />
                         <span className="hidden md:inline text-sm font-bold uppercase tracking-wider">Cart</span>
 
                         {cartCount > 0 && (
-                            <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold bg-mongodb-green text-white">
+                            <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold bg-primary text-primary-foreground">
                                 {cartCount}
                             </span>
                         )}
@@ -114,9 +125,9 @@ function ActiveLink({ href, icon: Icon, label, isScrolled, isExact = false }) {
             // Base styles
             isScrolled ? "text-foreground" : "text-foreground",
             // Hover states
-            isScrolled ? "hover:bg-secondary hover:text-mongodb-green" : "hover:bg-secondary/50",
+            isScrolled ? "hover:bg-secondary hover:text-primary" : "hover:bg-secondary/50",
             // Active states
-            isActive && "bg-secondary text-mongodb-green"
+            isActive && "bg-secondary text-primary"
         )}>
             <Icon className="w-5 h-5 md:w-5 md:h-5" />
             <span className="hidden md:inline text-sm font-bold uppercase tracking-wider">{label}</span>

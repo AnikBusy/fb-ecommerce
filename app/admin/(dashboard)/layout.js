@@ -16,7 +16,7 @@ export default async function AdminLayout({ children }) {
     const pendingCount = await getPendingOrderCount()
 
     return (
-        <div className="flex h-screen overflow-hidden bg-background text-foreground">
+        <div className="fixed inset-0 flex overflow-hidden bg-background text-foreground">
             {/* Desktop Sidebar */}
             <aside className="hidden w-56 border-r bg-muted/40 lg:block flex-shrink-0">
                 <div className="flex h-full flex-col gap-2">
@@ -25,11 +25,11 @@ export default async function AdminLayout({ children }) {
                             {settings.logoUrl ? (
                                 <img src={settings.logoUrl} alt={settings.siteName} className="h-8 w-auto object-contain" />
                             ) : (
-                                <span className="text-xl">{settings.siteName || 'Flux'}<span className="text-mongodb-green">.</span></span>
+                                <span className="text-xl">{settings.siteName || 'Flux'}<span className="text-primary">.</span></span>
                             )}
                         </Link>
                     </div>
-                    <div className="flex-1 overflow-y-auto py-2">
+                    <div className="flex-1 overflow-y-auto no-scrollbar py-2">
                         <AdminNav className="grid items-start px-4 text-sm font-medium" pendingCount={pendingCount} />
                     </div>
                     <div className="mt-auto border-t p-2">
@@ -38,14 +38,14 @@ export default async function AdminLayout({ children }) {
                 </div>
             </aside>
 
-            <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
-                <header className="flex h-[60px] items-center gap-4 border-b bg-muted/40 px-6 flex-shrink-0">
+            <div className="flex-1 flex flex-col min-w-0">
+                <header className="flex h-[60px] items-center gap-4 border-b bg-muted/40 px-6 shrink-0">
                     {/* Mobile Navigation */}
                     <AdminMobileNav admin={admin} settings={settings} pendingCount={pendingCount} />
 
                     <div className="flex-1 flex items-center gap-4">
                         <Link className="lg:hidden flex items-center gap-2 font-black tracking-tighter uppercase text-zinc-900 dark:text-zinc-100" href="/admin/dashboard">
-                            <span>{settings.siteName || 'Flux'}<span className="text-mongodb-green">.</span></span>
+                            <span>{settings.siteName || 'Flux'}<span className="text-primary">.</span></span>
                         </Link>
                         <AdminSearch />
                     </div>

@@ -17,7 +17,7 @@ export function ProductCard({ product }) {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="group relative flex flex-col shop-card-bg overflow-hidden transition-all duration-500 hover:shadow-2xl border border-border/80 hover:border-mongodb-green/30 shadow-sm rounded-2xl"
+            className="group relative flex flex-col highlight overflow-hidden transition-all duration-500 hover:shadow-2xl border border-border/80 hover:border-primary/30 shadow-sm rounded-2xl"
         >
             {/* Image Container */}
             <Link href={`/product/${product.slug}`} className="relative aspect-[1/1] overflow-hidden bg-secondary/30">
@@ -38,7 +38,7 @@ export function ProductCard({ product }) {
                 {/* Badges */}
                 <div className="absolute top-2 left-2 flex flex-col gap-1 z-10">
                     {discount > 0 && (
-                        <div className="bg-mongodb-green text-mongodb-dark font-black px-2 py-0.5 rounded-full text-[8px] tracking-tight uppercase shadow-sm">
+                        <div className="bg-primary text-primary-foreground font-black px-2 py-0.5 rounded-full text-[8px] tracking-tight uppercase shadow-sm">
                             {discount}% OFF
                         </div>
                     )}
@@ -48,20 +48,20 @@ export function ProductCard({ product }) {
             {/* Product Info */}
             <div className="p-3 md:p-4 flex flex-col flex-1">
                 <Link href={`/product/${product.slug}`} className="mb-2">
-                    <h3 className="font-bold shop-text leading-tight group-hover:text-mongodb-green transition-colors text-sm md:text-base line-clamp-2 min-h-[2.5rem]">
+                    <h3 className="font-bold leading-tight group-hover:text-primary transition-colors text-sm md:text-base line-clamp-2 min-h-[2.5rem]">
                         {product.title}
                     </h3>
                 </Link>
 
                 <div className="mt-auto flex items-center justify-between gap-2">
                     <div className="flex flex-col">
-                        <span className="text-base md:text-lg font-black shop-text italic tracking-tighter">{formatCurrency(product.discountPrice || product.price)}</span>
+                        <span className="text-base md:text-lg font-black italic tracking-tighter">{formatCurrency(product.discountPrice || product.price)}</span>
                         {product.discountPrice > 0 && (
-                            <span className="text-[10px] shop-muted line-through tracking-tight">{formatCurrency(product.price)}</span>
+                            <span className="text-[10px] text-muted-foreground line-through tracking-tight">{formatCurrency(product.price)}</span>
                         )}
                     </div>
 
-                    <AddToCartButton product={product} size="icon" className="h-8 w-8 rounded-full bg-mongodb-green/10 text-mongodb-green border border-mongodb-green/20 hover:bg-mongodb-green hover:text-mongodb-dark transition-all duration-300 shadow-sm shrink-0" />
+                    <AddToCartButton product={product} size="icon" className="h-8 w-8 rounded-full bg-primary/10 text-primary border border-primary/20 hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-sm shrink-0" />
                 </div>
             </div>
         </motion.div>

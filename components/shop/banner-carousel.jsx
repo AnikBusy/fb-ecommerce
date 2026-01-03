@@ -49,7 +49,7 @@ export function BannerCarousel({ banners }) {
                                 setCurrent(i);
                             }}
                             className={`h-1.5 transition-all duration-300 cursor-pointer rounded-full ${i === current
-                                ? "w-12 bg-mongodb-green shadow-[0_0_10px_rgba(0,237,100,0.5)]"
+                                ? "w-12 bg-primary shadow-primary/50 shadow-lg"
                                 : "w-6 bg-white/30 hover:bg-white/60 hover:w-8"
                                 }`}
                             aria-label={`Go to slide ${i + 1}`}

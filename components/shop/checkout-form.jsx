@@ -151,7 +151,7 @@ export function CheckoutForm() {
                                     <div className="flex items-center bg-secondary/50 rounded-full border border-border p-0.5 shadow-sm h-7">
                                         <button
                                             type="button"
-                                            className="h-6 w-6 rounded-full flex items-center justify-center text-muted-foreground hover:text-mongodb-green hover:bg-background transition-all"
+                                            className="h-6 w-6 rounded-full flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-background transition-all"
                                             onClick={() => updateQuantity(item.product._id, item.quantity - 1)}
                                         >
                                             <Minus className="h-2.5 w-2.5" />
@@ -162,7 +162,7 @@ export function CheckoutForm() {
                                         />
                                         <button
                                             type="button"
-                                            className="h-6 w-6 rounded-full flex items-center justify-center text-muted-foreground hover:text-mongodb-green hover:bg-background transition-all"
+                                            className="h-6 w-6 rounded-full flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-background transition-all"
                                             onClick={() => updateQuantity(item.product._id, item.quantity + 1)}
                                         >
                                             <Plus className="h-2.5 w-2.5" />

@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
 import { Filter, Grid3X3, List } from "lucide-react"
 import { CategorySidebar } from "@/components/shop/category-sidebar"
+import * as motion from "framer-motion/client"
 
 export const dynamic = 'force-dynamic';
 
@@ -20,10 +21,15 @@ export default async function ShopPage() {
         <div className="py-12 md:py-24 min-h-screen max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] px-4 md:px-0">
             <div className="flex flex-col gap-12 md:gap-20">
                 {/* Header Section */}
-                <div className="space-y-3">
-                    <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tighter shop-text">All Collection</h1>
-                    <p className="shop-muted text-xs md:text-base max-w-xl italic font-medium leading-relaxed">Explore our items</p>
-                </div>
+                <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="space-y-3"
+                >
+                    <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">All Collection</h1>
+                    <p className="text-muted-foreground text-xs md:text-base max-w-xl italic font-medium leading-relaxed">Explore our items</p>
+                </motion.div>
 
                 <div className="grid lg:grid-cols-4 gap-12 md:gap-20">
                     {/* Sidebar - Desktop Only */}
@@ -35,11 +41,30 @@ export default async function ShopPage() {
 
                     {/* Product Grid */}
                     <div className="w-full lg:col-span-3">
-                        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-10">
+                        <motion.div
+                            initial="hidden"
+                            animate="visible"
+                            variants={{
+                                visible: {
+                                    transition: {
+                                        staggerChildren: 0.05
+                                    }
+                                }
+                            }}
+                            className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-10"
+                        >
                             {serializedProducts.map((product) => (
-                                <ProductCard key={product._id} product={product} />
+                                <motion.div
+                                    key={product._id}
+                                    variants={{
+                                        hidden: { opacity: 0, y: 20 },
+                                        visible: { opacity: 1, y: 0 }
+                                    }}
+                                >
+                                    <ProductCard product={product} />
+                                </motion.div>
                             ))}
-                        </div>
+                        </motion.div>
 
                         {serializedProducts.length === 0 && (
                             <div className="py-32 text-center">

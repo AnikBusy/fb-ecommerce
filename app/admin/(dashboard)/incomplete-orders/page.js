@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { timeAgo, formatCurrency, toEnglishDigits } from "@/lib/utils"
-import { Phone, Trash2, ArrowRight } from "lucide-react"
+import { Phone, Trash2, ArrowRight, Zap } from "lucide-react"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 
@@ -73,10 +73,25 @@ export default function IncompleteOrdersPage() {
                                             </div>
                                         </TableCell>
                                         <TableCell>
-                                            <div className="flex flex-col gap-1 max-w-[250px]">
+                                            <div className="flex flex-col gap-2 max-w-[300px]">
                                                 {order.products?.map((item, idx) => (
-                                                    <div key={idx} className="text-xs truncate">
-                                                        <span className="font-bold">{item.quantity}x</span> {item.product?.title || 'Unknown'}
+                                                    <div key={idx} className="flex items-center gap-2 text-xs">
+                                                        <div className="h-8 w-8 rounded flex-shrink-0 bg-muted overflow-hidden border border-border">
+                                                            {item.product?.images?.[0] ? (
+                                                                <img
+                                                                    src={item.product.images[0]}
+                                                                    alt={item.product.title}
+                                                                    className="h-full w-full object-cover"
+                                                                />
+                                                            ) : (
+                                                                <div className="h-full w-full flex items-center justify-center">
+                                                                    <Zap className="h-4 w-4 text-muted-foreground opacity-20" />
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        <div className="flex-1 truncate">
+                                                            <span className="font-bold">{item.quantity}x</span> {item.product?.title || 'Unknown'}
+                                                        </div>
                                                     </div>
                                                 ))}
                                                 {order.products?.length === 0 && <span className="text-muted-foreground italic">No items</span>}

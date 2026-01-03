@@ -102,7 +102,7 @@ export function OrderDetailsDialog({ order }) {
                                 variant="ghost"
                                 size="sm"
                                 onClick={generateTrackingId}
-                                className="h-6 text-[10px] gap-1 text-mongodb-green hover:text-mongodb-green hover:bg-mongodb-green/10 uppercase font-black tracking-widest"
+                                className="h-6 text-[10px] gap-1 text-primary hover:text-primary hover:bg-primary/10 uppercase font-black tracking-widest"
                             >
                                 <Sparkles className="h-3 w-3" />
                                 Auto-Generate

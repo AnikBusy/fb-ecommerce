@@ -3,21 +3,25 @@
 import { usePathname } from 'next/navigation'
 import Script from 'next/script'
 import { useEffect, useState } from 'react'
+import { useSettings } from '@/providers/settings-provider'
 
 export const FacebookPixel = () => {
+    const { isPixelActive, facebookPixelId } = useSettings()
     const [loaded, setLoaded] = useState(false)
     const pathname = usePathname()
 
     useEffect(() => {
-        if (!loaded) return
+        if (!isPixelActive || !facebookPixelId || !loaded) return
 
         import('react-facebook-pixel')
             .then((x) => x.default)
             .then((ReactPixel) => {
-                ReactPixel.init(process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID || 'your-pixel-id') // Use env var
+                ReactPixel.init(facebookPixelId)
                 ReactPixel.pageView()
             })
-    }, [pathname, loaded])
+    }, [pathname, loaded, isPixelActive, facebookPixelId])
+
+    if (!isPixelActive || !facebookPixelId) return null
 
     return (
         <div>

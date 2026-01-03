@@ -16,7 +16,7 @@ const CustomTooltip = ({ active, payload, label }) => {
                     {payload[0].payload.revenue !== undefined && (
                         <div className="flex items-center justify-between gap-8">
                             <span className="text-xs text-muted-foreground font-medium">Sales</span>
-                            <span className="text-sm font-bold text-mongodb-green">{formatCurrency(payload[0].payload.revenue)}</span>
+                            <span className="text-sm font-bold text-primary">{formatCurrency(payload[0].payload.revenue)}</span>
                         </div>
                     )}
                 </div>
@@ -46,19 +46,19 @@ export function MonthlyOrdersChart({ data, height = 350 }) {
                     tickFormatter={(value) => `${value}`}
                 />
                 <Tooltip
-                    cursor={{ fill: 'rgba(0, 237, 100, 0.05)', radius: 8 }}
+                    cursor={{ fill: 'hsl(var(--primary) / 0.05)', radius: 8 }}
                     content={<CustomTooltip />}
                 />
                 <Bar
                     dataKey="orders"
-                    fill="#00ED64"
+                    fill="hsl(var(--primary))"
                     radius={[6, 6, 0, 0]}
                     barSize={32}
                 >
                     {data.map((entry, index) => (
                         <Cell
                             key={`cell-${index}`}
-                            className="fill-mongodb-green hover:fill-[#00FF6C] transition-all duration-300 cursor-pointer"
+                            className="fill-primary hover:opacity-80 transition-all duration-300 cursor-pointer"
                         />
                     ))}
                 </Bar>

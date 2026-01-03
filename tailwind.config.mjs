@@ -50,8 +50,6 @@ export default {
                     DEFAULT: "hsl(var(--card))",
                     foreground: "hsl(var(--card-foreground))",
                 },
-                "mongodb-dark": "#001E2B",
-                "mongodb-green": "#00ED64",
             },
             borderRadius: {
                 lg: "var(--radius)",

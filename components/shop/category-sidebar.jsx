@@ -28,12 +28,12 @@ export function CategorySidebar({ categories, className, onSelect }) {
         <div className={cn("w-full h-full flex flex-col", className)}>
             <div className="p-6">
                 <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-mongodb-green/10 flex items-center justify-center text-mongodb-green">
+                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
                         <LayoutGrid className="w-4 h-4" />
                     </div>
                     <div>
                         <span className="block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">Discover</span>
-                        <span className="block text-xs font-black uppercase tracking-tight text-zinc-950 dark:text-white">Categories</span>
+                        <span className="block text-xs font-black uppercase tracking-tight text-foreground">Categories</span>
                     </div>
                 </div>
             </div>
@@ -46,19 +46,19 @@ export function CategorySidebar({ categories, className, onSelect }) {
                         onClick={handleSelect}
                         className={cn(
                             "group flex items-center justify-between rounded-xl transition-all duration-300",
-                            pathname === '/shop' ? "bg-zinc-50 dark:bg-zinc-900 shadow-sm" : "hover:bg-zinc-50 dark:hover:bg-zinc-900"
+                            pathname === '/shop' ? "bg-accent shadow-sm" : "hover:bg-accent"
                         )}
                     >
                         <div className={cn(
                             "flex-1 px-4 py-3 text-[11px] font-black uppercase tracking-widest transition-all",
-                            "text-zinc-600 dark:text-zinc-400 group-hover:text-mongodb-green",
-                            pathname === '/shop' && "text-mongodb-green"
+                            "text-muted-foreground group-hover:text-primary",
+                            pathname === '/shop' && "text-primary"
                         )}>
                             <div className="flex items-center gap-3">
                                 <div className={cn(
-                                    "w-1.5 h-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 transition-all duration-300",
-                                    "group-hover:bg-mongodb-green group-hover:scale-125 shadow-[0_0_10px_rgba(0,237,100,0)] group-hover:shadow-[0_0_10px_rgba(0,237,100,0.4)]",
-                                    pathname === '/shop' && "bg-mongodb-green scale-125 shadow-[0_0_10px_rgba(0,237,100,0.4)]"
+                                    "w-1.5 h-1.5 rounded-full bg-border transition-all duration-300",
+                                    "group-hover:bg-primary group-hover:scale-125 shadow-sm group-hover:shadow-primary/40",
+                                    pathname === '/shop' && "bg-primary scale-125 shadow-primary/40"
                                 )}></div>
                                 Full Collection
                             </div>
@@ -76,7 +76,7 @@ export function CategorySidebar({ categories, className, onSelect }) {
                             <div
                                 className={cn(
                                     "group flex items-center justify-between rounded-xl transition-all duration-300",
-                                    (isExpanded || isActive) ? "bg-zinc-50 dark:bg-zinc-900 shadow-sm" : "hover:bg-zinc-50 dark:hover:bg-zinc-900"
+                                    (isExpanded || isActive) ? "bg-accent shadow-sm" : "hover:bg-accent"
                                 )}
                             >
                                 <Link
@@ -84,15 +84,15 @@ export function CategorySidebar({ categories, className, onSelect }) {
                                     onClick={handleSelect}
                                     className={cn(
                                         "flex-1 px-4 py-3 text-[11px] font-black uppercase tracking-widest transition-all",
-                                        "text-zinc-600 dark:text-zinc-400 group-hover:text-mongodb-green",
-                                        (isExpanded || isActive) && "text-mongodb-green"
+                                        "text-muted-foreground group-hover:text-primary",
+                                        (isExpanded || isActive) && "text-primary"
                                     )}
                                 >
                                     <div className="flex items-center gap-3">
                                         <div className={cn(
-                                            "w-1.5 h-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 transition-all duration-300",
-                                            "group-hover:bg-mongodb-green group-hover:scale-125 shadow-[0_0_10px_rgba(0,237,100,0)] group-hover:shadow-[0_0_10px_rgba(0,237,100,0.4)]",
-                                            (isExpanded || isActive) && "bg-mongodb-green scale-125 shadow-[0_0_10px_rgba(0,237,100,0.4)]"
+                                            "w-1.5 h-1.5 rounded-full bg-border transition-all duration-300",
+                                            "group-hover:bg-primary group-hover:scale-125 shadow-sm group-hover:shadow-primary/40",
+                                            (isExpanded || isActive) && "bg-primary scale-125 shadow-primary/40"
                                         )}></div>
                                         {category.name}
                                     </div>
@@ -102,8 +102,8 @@ export function CategorySidebar({ categories, className, onSelect }) {
                                     <button
                                         onClick={(e) => toggleExpand(category._id, e)}
                                         className={cn(
-                                            "p-3 text-zinc-300 hover:text-mongodb-green transition-all duration-300",
-                                            isExpanded && "rotate-180 text-mongodb-green"
+                                            "p-3 text-muted-foreground hover:text-primary transition-all duration-300",
+                                            isExpanded && "rotate-180 text-primary"
                                         )}
                                     >
                                         <ChevronDown className="w-4 h-4" />
@@ -112,7 +112,7 @@ export function CategorySidebar({ categories, className, onSelect }) {
                             </div>
 
                             {hasChildren && isExpanded && (
-                                <div className="ml-6 border-l-2 border-zinc-100 dark:border-zinc-800 space-y-0.5 animate-in slide-in-from-top-2 duration-300">
+                                <div className="ml-6 border-l-2 border-border space-y-0.5 animate-in slide-in-from-top-2 duration-300">
                                     {children.map(child => {
                                         const isChildActive = pathname === `/category/${child.slug}`
                                         return (
@@ -122,12 +122,12 @@ export function CategorySidebar({ categories, className, onSelect }) {
                                                 onClick={handleSelect}
                                                 className={cn(
                                                     "group flex items-center gap-3 px-5 py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all",
-                                                    isChildActive ? "text-mongodb-green" : "text-zinc-400 hover:text-mongodb-green"
+                                                    isChildActive ? "text-primary" : "text-muted-foreground hover:text-primary"
                                                 )}
                                             >
                                                 <div className={cn(
                                                     "w-2 h-px transition-all",
-                                                    isChildActive ? "w-4 bg-mongodb-green" : "bg-zinc-200 dark:bg-zinc-800 group-hover:w-4 group-hover:bg-mongodb-green"
+                                                    isChildActive ? "w-4 bg-primary" : "bg-border group-hover:w-4 group-hover:bg-primary"
                                                 )}></div>
                                                 {child.name}
                                             </Link>
@@ -141,9 +141,9 @@ export function CategorySidebar({ categories, className, onSelect }) {
             </nav>
 
             <div className="p-4 mt-auto">
-                <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800">
+                <div className="p-4 rounded-2xl bg-accent border border-border">
                     <p className="text-[8px] font-black uppercase tracking-[0.3em] text-zinc-400 mb-2">Member Perks</p>
-                    <p className="text-[10px] font-bold text-zinc-600 dark:text-zinc-400 leading-relaxed uppercase">Unlock curated <span className="text-mongodb-green">Clusters</span></p>
+                    <p className="text-[10px] font-bold text-muted-foreground leading-relaxed uppercase">Unlock curated <span className="text-primary">Clusters</span></p>
                 </div>
             </div>
         </div>

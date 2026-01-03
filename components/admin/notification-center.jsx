@@ -62,15 +62,21 @@ export function NotificationCenter() {
 
     const unreadNotifications = notifications.filter(n => !n.isRead)
 
+    if (!mounted) return (
+        <Button variant="ghost" size="icon" disabled>
+            <Bell className="w-5 h-5 text-muted-foreground opacity-50" />
+        </Button>
+    )
+
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative group hover:bg-mongodb-green/10 rounded-full transition-all">
-                    <Bell className="w-5 h-5 text-muted-foreground group-hover:text-mongodb-green transition-colors" />
+                <Button variant="ghost" size="icon" className="relative group hover:bg-primary/10 rounded-full transition-all">
+                    <Bell className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
                     {unreadCount > 0 && (
                         <span className="absolute top-1 right-1 flex h-4 w-4">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-mongodb-green opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-4 w-4 bg-mongodb-green text-[10px] font-black items-center justify-center text-mongodb-dark">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-4 w-4 bg-primary text-[10px] font-black items-center justify-center text-primary-foreground">
                                 {unreadCount > 9 ? '9+' : unreadCount}
                             </span>
                         </span>
@@ -78,13 +84,13 @@ export function NotificationCenter() {
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80 md:w-96 p-0 glass border-border shadow-2xl rounded-2xl overflow-hidden" align="end">
-                <div className="p-4 border-b border-border flex items-center justify-between bg-mongodb-green/5">
-                    <h4 className="font-black uppercase tracking-widest text-xs shop-text">Recent Alerts</h4>
+                <div className="p-4 border-b border-border flex items-center justify-between bg-primary/5">
+                    <h4 className="font-black uppercase tracking-widest text-xs text-foreground">Recent Alerts</h4>
                     {unreadCount > 0 && (
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="h-8 text-[10px] font-black uppercase tracking-widest hover:text-mongodb-green p-0"
+                            className="h-8 text-[10px] font-black uppercase tracking-widest hover:text-primary p-0"
                             onClick={handleMarkAllRead}
                         >
                             Clear All
@@ -99,21 +105,21 @@ export function NotificationCenter() {
                                     key={notification._id}
                                     className={cn(
                                         "p-4 flex gap-4 transition-colors hover:bg-secondary/20 group relative",
-                                        !notification.isRead && "bg-mongodb-green/5"
+                                        !notification.isRead && "bg-primary/5"
                                     )}
                                 >
                                     <div className={cn(
                                         "h-2 w-2 rounded-full mt-2 flex-shrink-0",
-                                        notification.isRead ? "bg-muted" : "bg-mongodb-green"
+                                        notification.isRead ? "bg-muted" : "bg-primary"
                                     )} />
                                     <div className="flex-1 space-y-1">
                                         <div className="flex items-center justify-between gap-2">
-                                            <p className="text-xs font-bold shop-text leading-tight">{notification.title}</p>
-                                            <span className="text-[10px] shop-muted whitespace-nowrap">
+                                            <p className="text-xs font-bold text-foreground leading-tight">{notification.title}</p>
+                                            <span className="text-[10px] text-muted-foreground whitespace-nowrap">
                                                 {mounted && formatTimeAgo(notification.createdAt)}
                                             </span>
                                         </div>
-                                        <p className="text-[11px] shop-muted line-clamp-2 leading-relaxed">{notification.message}</p>
+                                        <p className="text-[11px] text-muted-foreground line-clamp-2 leading-relaxed">{notification.message}</p>
                                         <div className="flex items-center gap-4 pt-2">
                                             {notification.link && (
                                                 <Link
@@ -122,7 +128,7 @@ export function NotificationCenter() {
                                                         handleMarkAsRead(notification._id)
                                                         setOpen(false)
                                                     }}
-                                                    className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-mongodb-green hover:underline"
+                                                    className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-primary hover:underline"
                                                 >
                                                     <ExternalLink className="w-3 h-3" />
                                                     View Details
@@ -131,7 +137,7 @@ export function NotificationCenter() {
                                             {!notification.isRead && (
                                                 <button
                                                     onClick={() => handleMarkAsRead(notification._id)}
-                                                    className="text-[10px] font-black uppercase tracking-widest shop-muted hover:text-mongodb-green transition-colors"
+                                                    className="text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
                                                 >
                                                     Mark Read
                                                 </button>
@@ -147,8 +153,8 @@ export function NotificationCenter() {
                                 <Bell className="w-6 h-6 text-muted-foreground opacity-20" />
                             </div>
                             <div className="space-y-1">
-                                <p className="text-xs font-bold shop-text">No New Alerts</p>
-                                <p className="text-[10px] shop-muted uppercase tracking-widest">You're all caught up!</p>
+                                <p className="text-xs font-bold text-foreground">No New Alerts</p>
+                                <p className="text-[10px] text-muted-foreground uppercase tracking-widest">You're all caught up!</p>
                             </div>
                         </div>
                     )}

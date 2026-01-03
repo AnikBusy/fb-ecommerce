@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
@@ -9,6 +9,19 @@ import { AdminProfileSection } from "./admin-profile-section"
 
 export function AdminMobileNav({ admin, settings, pendingCount }) {
     const [open, setOpen] = useState(false)
+    const [mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    if (!mounted) return (
+        <div className="lg:hidden">
+            <Button variant="ghost" size="icon" disabled>
+                <Menu className="h-6 w-6" />
+            </Button>
+        </div>
+    )
 
     return (
         <div className="lg:hidden">
@@ -20,9 +33,9 @@ export function AdminMobileNav({ admin, settings, pendingCount }) {
                     </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="w-64 p-0 flex flex-col h-full bg-background border-r border-border">
-                    <SheetHeader className="h-[60px] border-b px-6 flex items-center justify-start text-left">
-                        <SheetTitle className="font-black tracking-tighter uppercase text-zinc-900 dark:text-zinc-100">
-                            {settings.siteName || 'Flux'}<span className="text-mongodb-green">.</span>
+                    <SheetHeader className="h-[60px] border-b px-6 flex items-center justify-start text-left shrink-0">
+                        <SheetTitle className="text-zinc-900 dark:text-zinc-100 font-bold uppercase tracking-tight">
+                            {settings.siteName || 'Flux'}<span className="text-primary">.</span>
                         </SheetTitle>
                     </SheetHeader>
                     <div className="flex-1 overflow-y-auto py-2">

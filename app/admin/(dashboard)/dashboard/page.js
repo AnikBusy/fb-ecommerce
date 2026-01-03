@@ -98,7 +98,7 @@ export default async function AdminDashboard() {
                         <div className="flex items-baseline gap-4 mb-6 ml-4">
                             <div className="text-2xl font-bold">{stats.monthOrdersCount} <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Orders</span></div>
                             <div className="h-4 w-px bg-zinc-200 dark:bg-zinc-800" />
-                            <div className="text-2xl font-bold text-mongodb-green">{formatCurrency(stats.monthRevenue)} <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Sales</span></div>
+                            <div className="text-2xl font-bold text-primary">{formatCurrency(stats.monthRevenue)} <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Sales</span></div>
                         </div>
                         <MonthlyOrdersChart data={stats.monthlyOrdersGraph} height={250} />
                     </CardContent>

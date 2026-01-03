@@ -2,6 +2,7 @@
 
 import dbConnect from "@/lib/db";
 import Order from "@/models/Order";
+import Product from "@/models/Product";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
@@ -62,17 +63,19 @@ export async function getOrders(options = {}) {
             .limit(limit)
             .lean();
 
-        // Calculate history for each customer (using all orders for accuracy)
-        const allOrders = await Order.find(query).select('phone status').lean();
+        // Efficiently calculate history for only the customers on the current page
+        const phones = [...new Set(orders.map(o => o.phone).filter(Boolean))];
+        const historyData = await Order.find({ phone: { $in: phones } }).select('phone status').lean();
+
         const ordersWithHistory = orders.map((order) => {
             if (!order.phone) return { ...order, history: null };
 
-            const historyOrders = allOrders.filter(o => o.phone === order.phone && String(o._id) !== String(order._id));
+            const customerOrders = historyData.filter(o => o.phone === order.phone && String(o._id) !== String(order._id));
             const history = {
-                total: historyOrders.length,
-                delivered: historyOrders.filter(o => o.status === 'delivered').length,
-                cancelled: historyOrders.filter(o => o.status === 'cancelled').length,
-                returned: historyOrders.filter(o => o.status === 'returned').length,
+                total: customerOrders.length,
+                delivered: customerOrders.filter(o => o.status === 'delivered').length,
+                cancelled: customerOrders.filter(o => o.status === 'cancelled').length,
+                returned: customerOrders.filter(o => o.status === 'returned').length,
             };
 
             return { ...order, history };
@@ -240,6 +243,18 @@ export async function deleteOrder(id) {
         revalidatePath('/admin/orders')
         return { success: true }
     } catch (error) {
+        return { success: false, error: error.message }
+    }
+}
+
+export async function bulkDeleteOrders(orderIds) {
+    await dbConnect()
+    try {
+        await Order.deleteMany({ _id: { $in: orderIds } })
+        revalidatePath('/admin/orders')
+        return { success: true }
+    } catch (error) {
+        console.error("Bulk delete error:", error)
         return { success: false, error: error.message }
     }
 }

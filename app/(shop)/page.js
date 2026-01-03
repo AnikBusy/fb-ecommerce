@@ -56,25 +56,25 @@ export default async function HomePage() {
 
                 {/* 3. New Added Products (Just Arrived) */}
                 <section className="relative">
-                    <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-mongodb-green/5 rounded-full blur-[150px] pointer-events-none"></div>
+                    <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[150px] pointer-events-none"></div>
 
                     <div className="relative p-0">
                         <div className="">
                             <div className="flex flex-col md:flex-row md:items-end justify-between mb-4 md:mb-8 gap-4">
                                 <div className="space-y-2">
                                     <div className="flex items-center gap-3">
-                                        <div className="h-0.5 w-6 bg-mongodb-green"></div>
-                                        <span className="text-mongodb-green text-[9px] font-black uppercase tracking-[0.3em]">Pulse</span>
+                                        <div className="h-0.5 w-6 bg-primary"></div>
+                                        <span className="text-primary text-[9px] font-black uppercase tracking-[0.3em]">Pulse</span>
                                     </div>
-                                    <h3 className="text-xl md:text-4xl font-black uppercase tracking-tighter shop-text">New Arrived</h3>
+                                    <h3 className="text-xl md:text-4xl font-black uppercase tracking-tighter text-foreground">New Arrived</h3>
                                 </div>
-                                <Link href="/shop" className="group flex items-center gap-4 bg-mongodb-green px-5 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all hover:scale-105 active:scale-95 w-fit">
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-mongodb-dark">View Store</span>
-                                    <ArrowRight className="w-3.5 h-3.5 text-mongodb-dark transition-transform group-hover:translate-x-1" />
+                                <Link href="/shop" className="group flex items-center gap-4 bg-primary px-5 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all hover:scale-105 active:scale-95 w-fit">
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-primary-foreground">View Store</span>
+                                    <ArrowRight className="w-3.5 h-3.5 text-primary-foreground transition-transform group-hover:translate-x-1" />
                                 </Link>
                             </div>
-                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
-                                {serializedNewProducts.slice(0, 4).map((product) => (
+                            <div className="grid grid-cols-2 lg:grid-cols-6 gap-6 md:gap-4">
+                                {serializedNewProducts.slice(0, 6).map((product) => (
                                     <ProductCard key={product._id} product={product} />
                                 ))}
                             </div>
@@ -96,7 +96,7 @@ export default async function HomePage() {
                                 <Flame className="w-3.5 h-3.5 text-orange-500 fill-orange-500 animate-pulse" />
                                 <span className="text-[9px] font-black uppercase tracking-[0.2em] text-orange-600 dark:text-orange-400">Trending Now</span>
                             </div>
-                            <h2 className="text-xl md:text-5xl font-black uppercase tracking-tighter shop-text leading-[0.9]">
+                            <h2 className="text-xl md:text-5xl font-black uppercase tracking-tighter text-foreground leading-[0.9]">
                                 Most Loved <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500">Items</span>
                             </h2>
                         </div>
@@ -172,7 +172,7 @@ export default async function HomePage() {
                                 <Sparkles className="w-3.5 h-3.5 fill-yellow-500" />
                                 <span className="text-[9px] font-black uppercase tracking-[0.3em]">Current Stream</span>
                             </div>
-                            <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tighter shop-text">Featured Offers</h2>
+                            <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tighter text-foreground">Featured Offers</h2>
                         </div>
                     </div>
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
@@ -185,15 +185,15 @@ export default async function HomePage() {
                 {/* 7. Final Call to Action */}
                 <div className="flex flex-col items-center gap-6 md:gap-10 py-5 md:py-24 relative">
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-16 md:h-32 bg-gradient-to-b from-transparent via-border to-transparent"></div>
-                    <Button asChild size="lg" className="rounded-full bg-mongodb-green text-mongodb-dark hover:bg-[#00FF6C] px-8 md:px-16 h-12 md:h-20 font-black uppercase tracking-[0.2em] text-xs shadow-xl transition-all active:scale-95 group border-none">
+                    <Button asChild size="lg" className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 px-8 md:px-16 h-12 md:h-20 font-black uppercase tracking-[0.2em] text-xs shadow-xl transition-all active:scale-95 group border-none">
                         <Link href="/shop" className="flex items-center gap-4">
                             Explore All Products
                             <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                         </Link>
                     </Button>
                     <div className="text-center space-y-1.5 opacity-60">
-                        <p className="text-[10px] font-black uppercase tracking-[0.4em] shop-text">Cash On </p>
-                        <p className="text-[8px] font-bold uppercase tracking-[0.2em] shop-muted italic">Delivery Available</p>
+                        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-foreground">Cash On </p>
+                        <p className="text-[8px] font-bold uppercase tracking-[0.2em] text-muted-foreground italic">Delivery Available</p>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { createOrder } from "@/actions/order"
 import { saveIncompleteOrder, deleteIncompleteOrder } from "@/actions/incomplete-order"
 import { Button } from "@/components/ui/button"
@@ -14,9 +14,21 @@ import { toast } from "sonner"
 
 export function QuickOrderForm({ product, cart, total: cartTotal }) {
     const [loading, setLoading] = useState(false)
+    const [mounted, setMounted] = useState(false)
     const [area, setArea] = useState('inside-dhaka')
     const [incompleteOrderId, setIncompleteOrderId] = useState(null)
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
     const router = useRouter()
+
+    if (!mounted) return (
+        <div className="bg-card border border-border shadow-md rounded-xl p-8 md:p-10 min-h-[600px] flex items-center justify-center">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+    )
 
     const deliveryCharge = area === 'inside-dhaka' ? 60 : 110
 
@@ -25,12 +37,20 @@ export function QuickOrderForm({ product, cart, total: cartTotal }) {
         ? (product.discountPrice || product.price) + deliveryCharge
         : (cartTotal || 0) + deliveryCharge
 
-    // Auto-save function
+    // Auto-save function with basic "dirty" check
     const handleAutoSave = async (e) => {
         const form = e.target.closest('form')
         if (!form) return
 
         const formData = new FormData(form)
+        const name = formData.get('name')
+        const phone = formData.get('phone')
+        const address = formData.get('address')
+        const orderNote = formData.get('orderNote') || ''
+
+        // Simple validation to avoid saving empty/unchanged data frequently
+        if (!phone && !name) return
+
         const products = product
             ? [{
                 product: product._id,
@@ -44,22 +64,23 @@ export function QuickOrderForm({ product, cart, total: cartTotal }) {
             }))
 
         const data = {
-            customerName: formData.get('name'),
-            phone: formData.get('phone'),
-            address: formData.get('address'),
+            customerName: name,
+            phone: phone,
+            address: address,
             area: area,
             products: products,
             deliveryCharge,
             totalAmount: total,
-            orderNote: formData.get('orderNote') || ''
+            orderNote: orderNote
         }
 
-        // Only save if at least phone or name is present
-        if (data.phone || data.customerName) {
+        try {
             const res = await saveIncompleteOrder(data, incompleteOrderId)
             if (res.success && res.id) {
                 setIncompleteOrderId(res.id)
             }
+        } catch (err) {
+            console.error("Auto-save failed:", err)
         }
     }
 
@@ -109,24 +130,24 @@ export function QuickOrderForm({ product, cart, total: cartTotal }) {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="shop-card-bg border rounded-xl p-8 md:p-10 space-y-8 shadow-md relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-mongodb-green/5 rounded-full blur-3xl pointer-events-none"></div>
+        <form onSubmit={handleSubmit} className="bg-card border border-border shadow-sm rounded-xl p-8 md:p-10 space-y-8 shadow-md relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
 
             <div className="flex items-center gap-4 mb-2 relative">
-                <div className="bg-mongodb-green text-mongodb-dark p-3 rounded-2xl shadow-sm">
-                    <Zap className="w-5 h-5 fill-mongodb-dark" />
+                <div className="bg-primary text-primary-foreground p-3 rounded-2xl shadow-sm">
+                    <Zap className="w-5 h-5 fill-primary-foreground" />
                 </div>
                 <div>
-                    <h3 className="text-sm font-black uppercase tracking-[0.2em] shop-text">Express Order</h3>
-                    <p className="text-[10px] font-black shop-muted uppercase tracking-widest opacity-60">Instant execution</p>
+                    <h3 className="text-sm font-black uppercase tracking-[0.2em] text-foreground">Express Order</h3>
+                    <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest opacity-60">Instant execution</p>
                 </div>
             </div>
 
             <div className="grid gap-6 relative">
                 <div className="grid gap-3">
                     <div className="flex items-center gap-2 mb-1">
-                        <User className="w-3 h-3 text-mongodb-green" />
-                        <Label htmlFor="name" className="text-[10px] font-black uppercase tracking-widest shop-muted">Full Name</Label>
+                        <User className="w-3 h-3 text-primary" />
+                        <Label htmlFor="name" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Full Name</Label>
                     </div>
                     <Input
                         id="name"
@@ -134,13 +155,13 @@ export function QuickOrderForm({ product, cart, total: cartTotal }) {
                         required
                         placeholder="Type your name..."
                         onBlur={handleAutoSave}
-                        className="h-14 rounded-2xl border-border bg-secondary/30 shop-text placeholder:text-muted-foreground focus:border-mongodb-green focus:bg-card transition-all shadow-sm px-6"
+                        className="h-14 rounded-2xl border-border bg-secondary/30 text-foreground placeholder:text-muted-foreground focus:border-primary focus:bg-card transition-all shadow-sm px-6"
                     />
                 </div>
                 <div className="grid gap-3">
                     <div className="flex items-center gap-2 mb-1">
-                        <Phone className="w-3 h-3 text-mongodb-green" />
-                        <Label htmlFor="phone" className="text-[10px] font-black uppercase tracking-widest shop-muted">Phone Number</Label>
+                        <Phone className="w-3 h-3 text-primary" />
+                        <Label htmlFor="phone" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Phone Number</Label>
                     </div>
                     <Input
                         id="phone"
@@ -161,13 +182,13 @@ export function QuickOrderForm({ product, cart, total: cartTotal }) {
                             }
                         }}
                         onBlur={handleAutoSave}
-                        className="h-14 rounded-2xl border-border bg-secondary/30 shop-text placeholder:text-muted-foreground focus:border-mongodb-green focus:bg-card transition-all shadow-sm px-6"
+                        className="h-14 rounded-2xl border-border bg-secondary/30 text-foreground placeholder:text-muted-foreground focus:border-primary focus:bg-card transition-all shadow-sm px-6"
                     />
                 </div>
                 <div className="grid gap-3">
                     <div className="flex items-center gap-2 mb-1">
-                        <MapPin className="w-3 h-3 text-mongodb-green" />
-                        <Label htmlFor="address" className="text-[10px] font-black uppercase tracking-widest shop-muted">Shipping Address</Label>
+                        <MapPin className="w-3 h-3 text-primary" />
+                        <Label htmlFor="address" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Shipping Address</Label>
                     </div>
                     <Textarea
                         id="address"
@@ -175,32 +196,32 @@ export function QuickOrderForm({ product, cart, total: cartTotal }) {
                         required
                         placeholder="House, Road, Area..."
                         onBlur={handleAutoSave}
-                        className="min-h-[120px] rounded-2xl border-border bg-secondary/30 shop-text placeholder:text-muted-foreground focus:border-mongodb-green focus:bg-card transition-all p-6 shadow-sm resize-none"
+                        className="min-h-[120px] rounded-2xl border-border bg-secondary/30 text-foreground placeholder:text-muted-foreground focus:border-primary focus:bg-card transition-all p-6 shadow-sm resize-none"
                     />
                 </div>
                 <div className="grid gap-3">
                     <div className="flex items-center gap-2 mb-1">
-                        <Zap className="w-3 h-3 text-mongodb-green" />
-                        <Label htmlFor="orderNote" className="text-[10px] font-black uppercase tracking-widest shop-muted">Customer Note</Label>
+                        <Zap className="w-3 h-3 text-primary" />
+                        <Label htmlFor="orderNote" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Customer Note</Label>
                     </div>
                     <Input
                         id="orderNote"
                         name="orderNote"
                         placeholder=""
                         onBlur={handleAutoSave}
-                        className="h-14 rounded-2xl border-border bg-secondary/30 shop-text placeholder:text-muted-foreground focus:border-mongodb-green focus:bg-card transition-all shadow-sm px-6"
+                        className="h-14 rounded-2xl border-border bg-secondary/30 text-foreground placeholder:text-muted-foreground focus:border-primary focus:bg-card transition-all shadow-sm px-6"
                     />
                 </div>
                 <div className="grid gap-4">
-                    <Label className="text-[10px] font-black uppercase tracking-widest shop-muted">Regional Tier</Label>
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Regional Tier</Label>
                     <RadioGroup defaultValue="inside-dhaka" onValueChange={(val) => { setArea(val); setTimeout(() => document.getElementById('name').focus(), 0); }} className="flex flex-col md:flex-row gap-4">
-                        <div className="flex items-center space-x-3 bg-secondary/30 p-4 rounded-2xl border border-border flex-1 hover:border-mongodb-green transition-all cursor-pointer group shadow-sm">
-                            <RadioGroupItem value="inside-dhaka" id="quick-inside" className="border-border text-mongodb-green" />
-                            <Label htmlFor="quick-inside" className="text-[10px] font-black uppercase tracking-widest shop-muted group-hover:shop-text cursor-pointer transition-colors">Inside Dhaka (60 TK.)</Label>
+                        <div className="flex items-center space-x-3 bg-secondary/30 p-4 rounded-2xl border border-border flex-1 hover:border-primary transition-all cursor-pointer group shadow-sm">
+                            <RadioGroupItem value="inside-dhaka" id="quick-inside" className="border-border text-primary" />
+                            <Label htmlFor="quick-inside" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground group-hover:text-foreground cursor-pointer transition-colors">Inside Dhaka (60 TK.)</Label>
                         </div>
-                        <div className="flex items-center space-x-3 bg-secondary/30 p-4 rounded-2xl border border-border flex-1 hover:border-mongodb-green transition-all cursor-pointer group shadow-sm">
-                            <RadioGroupItem value="outside-dhaka" id="quick-outside" className="border-border text-mongodb-green" />
-                            <Label htmlFor="quick-outside" className="text-[10px] font-black uppercase tracking-widest shop-muted group-hover:shop-text cursor-pointer transition-colors">Outside Dhaka (110 TK.)</Label>
+                        <div className="flex items-center space-x-3 bg-secondary/30 p-4 rounded-2xl border border-border flex-1 hover:border-primary transition-all cursor-pointer group shadow-sm">
+                            <RadioGroupItem value="outside-dhaka" id="quick-outside" className="border-border text-primary" />
+                            <Label htmlFor="quick-outside" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground group-hover:text-foreground cursor-pointer transition-colors">Outside Dhaka (110 TK.)</Label>
                         </div>
                     </RadioGroup>
                 </div>
@@ -208,14 +229,14 @@ export function QuickOrderForm({ product, cart, total: cartTotal }) {
 
             <div className="pt-8 border-t border-border relative">
                 <div className="flex justify-between items-center mb-8">
-                    <span className="text-[10px] font-black uppercase tracking-widest shop-muted">Manifest Total</span>
-                    <span className="text-3xl font-black shop-text italic tracking-tighter flex items-baseline gap-1">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Manifest Total</span>
+                    <span className="text-3xl font-black text-foreground italic tracking-tighter flex items-baseline gap-1">
                         {total}
                         <span className="text-lg opacity-50 font-normal not-italic tracking-normal">TK.</span>
                     </span>
                 </div>
-                <Button className="w-full h-16 bg-mongodb-green hover:bg-[#00FF6C] text-mongodb-dark rounded-full shadow-lg hover:shadow-xl transition-all active:scale-95 font-black uppercase tracking-widest text-[10px] border-none" type="submit" disabled={loading}>
-                    {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Zap className="mr-2 h-4 w-4 fill-mongodb-dark" />}
+                <Button className="w-full h-16 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full shadow-lg hover:shadow-xl transition-all active:scale-95 font-black uppercase tracking-widest text-[10px] border-none" type="submit" disabled={loading}>
+                    {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Zap className="mr-2 h-4 w-4 fill-primary-foreground" />}
                     Place Order
                 </Button>
             </div>

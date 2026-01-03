@@ -118,13 +118,13 @@ export default function CreateOrderPage() {
 
     return (
         <div className="max-w-2xl mx-auto animate-fade-in-up">
-            <h1 className="text-xl font-black tracking-tighter uppercase mb-6 shop-text">
-                Create Manual Order<span className="text-mongodb-green">.</span>
+            <h1 className="text-xl font-bold uppercase mb-6 text-foreground">
+                Create Manual Order<span className="text-primary">.</span>
             </h1>
             <form onSubmit={handleSubmit}>
                 <Card className="mb-6">
-                    <CardHeader className="border-b border-border/50 bg-mongodb-green/5">
-                        <CardTitle className="text-sm font-black uppercase tracking-widest text-mongodb-green">Customer Details</CardTitle>
+                    <CardHeader className="border-b border-border/50 bg-primary/5">
+                        <CardTitle className="text-sm font-black uppercase tracking-widest text-primary">Customer Details</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="grid gap-2">
@@ -157,13 +157,13 @@ export default function CreateOrderPage() {
                 </Card>
 
                 <Card className="mb-6">
-                    <CardHeader className="border-b border-border/50 bg-mongodb-green/5">
-                        <CardTitle className="text-sm font-black uppercase tracking-widest text-mongodb-green">Order Items</CardTitle>
+                    <CardHeader className="border-b border-border/50 bg-primary/5">
+                        <CardTitle className="text-sm font-black uppercase tracking-widest text-primary">Order Items</CardTitle>
                     </CardHeader>
                     <CardContent className="p-0">
                         <div className="divide-y divide-border">
                             {formData.items.map((item, index) => (
-                                <div key={index} className="grid grid-cols-12 gap-4 p-4 items-center group hover:bg-mongodb-green/5 transition-colors">
+                                <div key={index} className="grid grid-cols-12 gap-4 p-4 items-center group hover:bg-primary/5 transition-colors">
                                     {/* Product Image Preview */}
                                     <div className="col-span-2 sm:col-span-1">
                                         <div className="aspect-square rounded-lg border bg-muted overflow-hidden">
@@ -183,7 +183,7 @@ export default function CreateOrderPage() {
                                     <div className="col-span-10 sm:col-span-6">
                                         <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1 block">Product</Label>
                                         <Select value={item.productId} onValueChange={(val) => handleItemChange(index, 'productId', val)}>
-                                            <SelectTrigger className="h-10 glass focus:ring-mongodb-green">
+                                            <SelectTrigger className="h-10 glass focus:ring-primary">
                                                 <SelectValue placeholder="Search & Select Product" />
                                             </SelectTrigger>
                                             <SelectContent className="glass">
@@ -232,7 +232,7 @@ export default function CreateOrderPage() {
                             ))}
                         </div>
                         <div className="p-4 bg-muted/5">
-                            <Button type="button" variant="outline" onClick={addItem} className="w-full border-dashed border-2 hover:bg-mongodb-green/10 hover:text-mongodb-green transition-all uppercase text-xs font-black tracking-widest">
+                            <Button type="button" variant="outline" onClick={addItem} className="w-full border-dashed border-2 hover:bg-primary/10 hover:text-primary transition-all uppercase text-xs font-black tracking-widest">
                                 + Add Another Item
                             </Button>
                         </div>
@@ -253,9 +253,9 @@ export default function CreateOrderPage() {
                                 <span className="text-muted-foreground">Delivery Charge</span>
                                 <span className="font-bold">{formData.deliveryCharge} TK.</span>
                             </div>
-                            <div className="flex justify-between p-6 bg-mongodb-green/5">
-                                <span className="text-sm font-black uppercase tracking-widest text-mongodb-green">Grand Total</span>
-                                <span className="text-xl font-black text-mongodb-green">{calculateTotal()} TK.</span>
+                            <div className="flex justify-between p-6 bg-primary/5">
+                                <span className="text-sm font-black uppercase tracking-widest text-primary">Grand Total</span>
+                                <span className="text-xl font-black text-primary">{calculateTotal()} TK.</span>
                             </div>
                         </div>
                     </CardContent>

@@ -8,7 +8,7 @@ export async function createNotification(data) {
     await dbConnect();
     try {
         const notification = await Notification.create(data);
-        revalidatePath('/', 'layout'); // Invalidate layout to refresh potentially global UI
+        revalidatePath('/admin', 'layout');
         return { success: true, notification: JSON.parse(JSON.stringify(notification)) };
     } catch (error) {
         console.error("Failed to create notification:", error);
@@ -34,7 +34,7 @@ export async function markAsRead(id) {
     await dbConnect();
     try {
         await Notification.findByIdAndUpdate(id, { isRead: true });
-        revalidatePath('/', 'layout');
+        revalidatePath('/admin', 'layout');
         return { success: true };
     } catch (error) {
         return { success: false, error: error.message };
@@ -45,7 +45,7 @@ export async function markAllAsRead() {
     await dbConnect();
     try {
         await Notification.updateMany({ isRead: false }, { isRead: true });
-        revalidatePath('/', 'layout');
+        revalidatePath('/admin', 'layout');
         return { success: true };
     } catch (error) {
         return { success: false, error: error.message };

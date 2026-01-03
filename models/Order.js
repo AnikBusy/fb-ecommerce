@@ -62,7 +62,4 @@ const OrderSchema = new mongoose.Schema({
     lastUpdatedBy: { type: String, default: '' },
 }, { timestamps: true });
 
-if (mongoose.models.Order) {
-    delete mongoose.models.Order;
-}
-export default mongoose.model('Order', OrderSchema);
+export default mongoose.models.Order || mongoose.model('Order', OrderSchema);

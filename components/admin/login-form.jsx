@@ -38,7 +38,7 @@ export function LoginForm({ settings }) {
                             <img src={settings.logoUrl} alt="Logo" className="h-full w-auto object-contain" />
                         ) : (
                             <span className="text-3xl font-black tracking-tighter uppercase text-zinc-950">
-                                {settings?.siteName?.toUpperCase() || 'FLUX'}<span className="text-mongodb-green">.</span>
+                                {settings?.siteName?.toUpperCase() || 'FLUX'}<span className="text-primary">.</span>
                             </span>
                         )}
                     </div>
@@ -57,7 +57,7 @@ export function LoginForm({ settings }) {
                     <div className="space-y-2">
                         <Label htmlFor="username" className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 ml-4">Registry User</Label>
                         <div className="relative group">
-                            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-mongodb-green transition-colors">
+                            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-primary transition-colors">
                                 <User className="w-5 h-5" />
                             </div>
                             <Input
@@ -65,7 +65,7 @@ export function LoginForm({ settings }) {
                                 name="username"
                                 type="text"
                                 required
-                                className="bg-white border-zinc-200 text-zinc-950 focus:border-mongodb-green focus:ring-4 focus:ring-mongodb-green/10 h-16 rounded-[1.25rem] pl-14 pr-6 text-sm font-bold transition-all placeholder:text-zinc-500 placeholder:font-medium placeholder:italic shadow-sm"
+                                className="bg-white border-zinc-200 text-zinc-950 focus:border-primary focus:ring-4 focus:ring-primary/10 h-16 rounded-[1.25rem] pl-14 pr-6 text-sm font-bold transition-all placeholder:text-zinc-500 placeholder:font-medium placeholder:italic shadow-sm"
                                 placeholder="Identification Handle"
                             />
                         </div>
@@ -74,7 +74,7 @@ export function LoginForm({ settings }) {
                     <div className="space-y-2">
                         <Label htmlFor="password" className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 ml-4">Access Key</Label>
                         <div className="relative group">
-                            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-mongodb-green transition-colors">
+                            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-primary transition-colors">
                                 <Lock className="w-5 h-5" />
                             </div>
                             <Input
@@ -82,7 +82,7 @@ export function LoginForm({ settings }) {
                                 name="password"
                                 type={showPassword ? "text" : "password"}
                                 required
-                                className="bg-white border-zinc-200 text-zinc-950 focus:border-mongodb-green focus:ring-4 focus:ring-mongodb-green/10 h-16 rounded-[1.25rem] pl-14 pr-14 text-sm font-bold transition-all placeholder:text-zinc-500 placeholder:font-medium placeholder:italic shadow-sm"
+                                className="bg-white border-zinc-200 text-zinc-950 focus:border-primary focus:ring-4 focus:ring-primary/10 h-16 rounded-[1.25rem] pl-14 pr-14 text-sm font-bold transition-all placeholder:text-zinc-500 placeholder:font-medium placeholder:italic shadow-sm"
                                 placeholder="••••••••••••"
                             />
                             <button

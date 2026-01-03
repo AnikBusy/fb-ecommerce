@@ -68,7 +68,7 @@ export function HeroSlider() {
                                         transition={{ duration: 0.8, delay: 0.2 }}
                                         className="flex items-center gap-4 mb-8"
                                     >
-                                        <div className="h-[3px] w-14 bg-mongodb-green rounded-full shadow-[0_0_15px_rgba(0,237,100,0.4)]" />
+                                        <div className="h-[3px] w-14 bg-primary rounded-full shadow-primary/40 shadow-lg" />
                                         <span className="text-foreground/70 text-[11px] font-black tracking-[0.5em] uppercase">
                                             {slide.subtitle}
                                         </span>
@@ -92,7 +92,7 @@ export function HeroSlider() {
                                     >
                                         <Button
                                             size="lg"
-                                            className="h-14 md:h-20 px-10 md:px-16 rounded-2xl bg-mongodb-green text-white hover:bg-[#00D650] text-sm font-black tracking-[0.2em] uppercase group transition-all active:scale-95 shadow-[0_20px_40px_rgba(0,237,100,0.25)] border-none"
+                                            className="h-14 md:h-20 px-10 md:px-16 rounded-2xl bg-primary text-primary-foreground hover:bg-primary/90 text-sm font-black tracking-[0.2em] uppercase group transition-all active:scale-95 shadow-xl shadow-primary/20 border-none"
                                         >
                                             Collection
                                             <ArrowRight className="ml-3 h-5 w-5 transition-transform group-hover:translate-x-2" />
@@ -100,7 +100,7 @@ export function HeroSlider() {
 
                                         <div className="hidden md:flex items-center gap-4 text-foreground/40">
                                             <div className="w-12 h-12 rounded-full border border-foreground/10 flex items-center justify-center">
-                                                <Sparkles className="w-5 h-5 text-mongodb-green" />
+                                                <Sparkles className="w-5 h-5 text-primary" />
                                             </div>
                                             <div className="flex flex-col">
                                                 <span className="text-[10px] font-black uppercase tracking-widest">Authored by</span>

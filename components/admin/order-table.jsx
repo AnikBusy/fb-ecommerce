@@ -8,9 +8,10 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { OrderStatusSelect } from "@/components/admin/order-status-select"
 import { OrderDetailsDialog } from "@/components/admin/order-details-dialog"
 import { FraudCheck } from "@/components/admin/fraud-check"
-import { ExternalLink, Printer, Truck, ArrowUpRight, Map } from "lucide-react"
+import { ExternalLink, Printer, Truck, ArrowUpRight, Map, Trash2 } from "lucide-react"
 import Link from "next/link"
 import { cn, formatCurrency, toEnglishDigits, timeAgo } from "@/lib/utils"
+import { useSettings } from '@/providers/settings-provider'
 import {
     Dialog,
     DialogContent,
@@ -27,7 +28,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { bulkAssignOrders } from '@/actions/order'
+import { bulkAssignOrders, deleteOrder, bulkDeleteOrders } from '@/actions/order'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
@@ -66,6 +67,27 @@ export function OrderTable({ orders, pagination }) {
         }
     }
 
+    const handleDelete = async (id) => {
+        if (!confirm('Are you sure you want to delete this order?')) return
+        setLoading(true)
+        const res = await deleteOrder(id)
+        if (res.success) {
+            router.refresh()
+        }
+        setLoading(false)
+    }
+
+    const handleBulkDelete = async () => {
+        if (!confirm(`Are you sure you want to delete ${selectedOrders.length} orders?`)) return
+        setLoading(true)
+        const res = await bulkDeleteOrders(selectedOrders)
+        if (res.success) {
+            setSelectedOrders([])
+            router.refresh()
+        }
+        setLoading(false)
+    }
+
     const handleBulkAssign = async () => {
         if (!bulkCourier) return
         setLoading(true)
@@ -93,56 +115,61 @@ export function OrderTable({ orders, pagination }) {
         <div className="space-y-4">
             {/* Bulk Action Bar */}
             {selectedOrders.length > 0 && (
-                <div className="bg-mongodb-green/10 border border-mongodb-green/20 p-4 rounded-lg flex items-center justify-between animate-in fade-in slide-in-from-top-2">
+                <div className="bg-primary/10 border border-primary/20 p-4 rounded-lg flex items-center justify-between animate-in fade-in slide-in-from-top-2">
                     <div className="flex items-center gap-2">
-                        <Badge className="bg-mongodb-green text-mongodb-dark font-bold hover:bg-mongodb-green">
+                        <Badge className="bg-primary text-primary-foreground font-bold hover:bg-primary">
                             {selectedOrders.length} Selected
                         </Badge>
                         <span className="text-sm text-zinc-600 font-medium">items selected</span>
                     </div>
 
-                    {/* Only show Assign Courier if orders are NOT already shipped/delivered */}
-                    {orders.filter(o => selectedOrders.includes(o._id) && ['pending', 'confirmed'].includes(o.status)).length > 0 ? (
-                        <Dialog open={isBulkDialogOpen} onOpenChange={setIsBulkDialogOpen}>
-                            <DialogTrigger asChild>
-                                <Button size="sm" className="bg-mongodb-green text-mongodb-dark hover:bg-[#00D85A] font-bold shadow-sm transition-colors">
-                                    <Truck className="mr-2 h-4 w-4" />
-                                    Assign Courier
-                                </Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                                <DialogHeader>
-                                    <DialogTitle>Bulk courier assignment</DialogTitle>
-                                    <DialogDescription>
-                                        Assign <strong>{selectedOrders.length} orders</strong> to a courier. This will mark them as <strong>Shipped</strong>.
-                                    </DialogDescription>
-                                </DialogHeader>
-                                <div className="py-4">
-                                    <Select value={bulkCourier} onValueChange={setBulkCourier}>
-                                        <SelectTrigger className="glass focus:ring-mongodb-green">
-                                            <SelectValue placeholder="Select Courier Service" />
-                                        </SelectTrigger>
-                                        <SelectContent className="glass">
-                                            <SelectItem value="Steadfast">Steadfast</SelectItem>
-                                            <SelectItem value="Pathao">Pathao</SelectItem>
-                                            <SelectItem value="RedX">RedX</SelectItem>
-                                            <SelectItem value="Paperfly">Paperfly</SelectItem>
-                                            <SelectItem value="Other">Other</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <DialogFooter>
-                                    <Button onClick={handleBulkAssign} disabled={!bulkCourier || loading} className="bg-zinc-900 text-white hover:bg-zinc-800">
-                                        {loading ? 'Processing...' : 'Confirm Assignment'}
+                    <div className="flex items-center gap-2">
+                        {/* Only show Assign Courier if orders are NOT already shipped/delivered */}
+                        {orders.filter(o => selectedOrders.includes(o._id) && ['pending', 'confirmed'].includes(o.status)).length > 0 && (
+                            <Dialog open={isBulkDialogOpen} onOpenChange={setIsBulkDialogOpen}>
+                                <DialogTrigger asChild>
+                                    <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold shadow-sm transition-colors">
+                                        <Truck className="mr-2 h-4 w-4" />
+                                        Assign Courier
                                     </Button>
-                                </DialogFooter>
-                            </DialogContent>
-                        </Dialog>
-                    ) : (
-                        <div className="text-sm text-muted-foreground italic mr-2">
-                            Actions unavailable for shipped orders
-                        </div>
-                    )}
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>Bulk courier assignment</DialogTitle>
+                                        <DialogDescription>
+                                            Assign <strong>{selectedOrders.length} orders</strong> to a courier. This will mark them as <strong>Shipped</strong>.
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <div className="py-4">
+                                        <Select value={bulkCourier} onValueChange={setBulkCourier}>
+                                            <SelectTrigger className="glass focus:ring-primary">
+                                                <SelectValue placeholder="Select Courier Service" />
+                                            </SelectTrigger>
+                                            <SelectContent className="glass">
+                                                <CourierOptions />
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <DialogFooter>
+                                        <Button onClick={handleBulkAssign} disabled={!bulkCourier || loading} className="bg-zinc-900 text-white hover:bg-zinc-800">
+                                            {loading ? 'Processing...' : 'Confirm Assignment'}
+                                        </Button>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
+                        )}
+
+                        <Button
+                            variant="destructive"
+                            size="sm"
+                            className="font-bold gap-2 shadow-sm"
+                            onClick={handleBulkDelete}
+                            disabled={loading}
+                        >
+                            <Trash2 className="h-4 w-4" />
+                            Delete ({selectedOrders.length})
+                        </Button>
+                    </div>
                 </div>
             )}
 
@@ -157,7 +184,7 @@ export function OrderTable({ orders, pagination }) {
                                 />
                             </TableHead>
                             <TableHead className="w-16">ID</TableHead>
-                            <TableHead className="w-20 hidden md:table-cell">Date</TableHead>
+                            <TableHead className="w-24">Date</TableHead>
                             <TableHead className="w-48">Customer</TableHead>
                             <TableHead className="w-32 hidden xl:table-cell">Products</TableHead>
                             <TableHead className="w-20">Total</TableHead>
@@ -181,11 +208,24 @@ export function OrderTable({ orders, pagination }) {
                                     <TableCell className="font-mono text-[10px] font-bold">
                                         #{order._id.substring(order._id.length - 4)}
                                     </TableCell>
-                                    <TableCell className="hidden md:table-cell">
+                                    <TableCell>
                                         <div className="flex flex-col">
-                                            <span className="text-xs font-medium">{new Date(order.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
+                                            <span className="text-xs font-bold whitespace-nowrap">
+                                                {new Date(order.createdAt).toLocaleDateString('en-GB', {
+                                                    day: '2-digit',
+                                                    month: '2-digit',
+                                                    year: 'numeric'
+                                                })}
+                                            </span>
+                                            <span className="text-[11px] text-muted-foreground uppercase font-black">
+                                                {new Date(order.createdAt).toLocaleTimeString('en-US', {
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                    hour12: true
+                                                })}
+                                            </span>
                                             {mounted && (
-                                                <span className="text-[10px] text-muted-foreground">{timeAgo(order.createdAt)}</span>
+                                                <span className="text-[10px] text-zinc-400 mt-0.5">{timeAgo(order.createdAt)}</span>
                                             )}
                                         </div>
                                     </TableCell>
@@ -326,6 +366,16 @@ export function OrderTable({ orders, pagination }) {
                                             </Link>
                                             <OrderDetailsDialog order={order} />
                                             <OrderStatusSelect orderId={order._id} currentStatus={order.status} />
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                title="Delete Order"
+                                                className="h-7 w-7 hover:bg-red-100 hover:text-red-700"
+                                                onClick={() => handleDelete(order._id)}
+                                                disabled={loading}
+                                            >
+                                                <Trash2 className="h-3.5 w-3.5" />
+                                            </Button>
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -368,7 +418,7 @@ export function OrderTable({ orders, pagination }) {
                                     onClick={() => handlePageChange(page)}
                                     className={cn(
                                         "h-8 w-8 p-0",
-                                        pagination.currentPage === page ? "bg-mongodb-green text-mongodb-dark hover:bg-mongodb-green/90" : "bg-white dark:bg-zinc-900"
+                                        pagination.currentPage === page ? "bg-primary text-primary-foreground hover:bg-primary/90" : "bg-white dark:bg-zinc-900"
                                     )}
                                 >
                                     {page}
@@ -389,5 +439,24 @@ export function OrderTable({ orders, pagination }) {
                 </div>
             )}
         </div>
+    )
+}
+
+function CourierOptions() {
+    const settings = useSettings()
+    const options = [
+        { name: 'Steadfast', enabled: settings.steadfastEnabled },
+        { name: 'Pathao', enabled: settings.pathaoEnabled },
+        { name: 'RedX', enabled: settings.redxEnabled },
+        { name: 'Paperfly', enabled: settings.paperflyEnabled },
+    ].filter(o => o.enabled)
+
+    return (
+        <>
+            {options.map(o => (
+                <SelectItem key={o.name} value={o.name}>{o.name}</SelectItem>
+            ))}
+            <SelectItem value="Other">Other</SelectItem>
+        </>
     )
 }
