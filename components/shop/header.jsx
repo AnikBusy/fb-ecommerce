@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useCart } from "@/providers/cart-provider"
 import { useSettings } from "@/providers/settings-provider"
-import { ShoppingBag, Home, ShoppingCart, Menu } from "lucide-react"
+import { ShoppingBag, Home, ShoppingCart, Menu, Search } from "lucide-react"
 import { motion, useScroll, useMotionValueEvent } from "framer-motion"
 import { useState, useEffect } from 'react'
 import { cn } from "@/lib/utils"
@@ -31,64 +31,50 @@ export function Header({ categories }) {
         setMounted(true)
     }, [])
 
+    const pathname = usePathname()
+    const isHome = pathname === '/'
+
     return (
         <motion.header
             className={cn(
                 "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-                isScrolled
+                isScrolled || !isHome
                     ? "h-16 bg-background/95 backdrop-blur-md border-b-[2px] border-border shadow-md"
                     : "h-20 bg-transparent"
             )}
         >
-            <div className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] h-full px-4 md:px-0 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                    {/* Mobile Menu Toggle */}
-                    {mounted ? (
-                        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-                            <SheetTrigger asChild>
-                                <button className="md:hidden p-2 text-foreground hover:bg-secondary/50 rounded-full transition-colors">
-                                    <Menu className="w-6 h-6" />
-                                </button>
-                            </SheetTrigger>
-                            <SheetContent side="left" className="p-0 border-r border-zinc-100 dark:border-zinc-800 w-[65vw] sm:w-[300px]">
-                                <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-                                <div className="h-full flex flex-col">
-                                    <div className="p-6 border-b border-zinc-100 dark:border-zinc-900">
-                                        <span className="text-xl font-black uppercase tracking-tighter">
-                                            {settings?.siteName?.toUpperCase() || 'MY SHOP'}<span className="text-primary">.</span>
-                                        </span>
-                                    </div>
-                                    <div className="flex-1 overflow-hidden">
-                                        <CategorySidebar
-                                            categories={categories || []}
-                                            onSelect={() => setIsMobileMenuOpen(false)}
-                                        />
-                                    </div>
-                                </div>
-                            </SheetContent>
-                        </Sheet>
-                    ) : (
-                        <button className="md:hidden p-2 text-foreground hover:bg-secondary/50 rounded-full transition-colors opacity-50" disabled>
-                            <Menu className="w-6 h-6" />
-                        </button>
-                    )}
+            <div className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] h-full px-4 md:px-0 flex items-center justify-between gap-4">
+                <div className="flex items-center gap-4 flex-shrink-0">
+                    {/* Logo - Visible on Desktop */}
+                    <div className="hidden lg:flex">
+                        <Link href="/" className="flex items-center gap-2 group">
+                            {settings?.logoUrl ? (
+                                <img src={settings.logoUrl} alt="Logo" className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
+                            ) : (
+                                <span className="text-xl md:text-2xl font-black tracking-tighter uppercase transition-colors duration-300 text-foreground">
+                                    {settings?.siteName?.toUpperCase() || 'MY SHOP'}<span className="text-primary">.</span>
+                                </span>
+                            )}
+                        </Link>
+                    </div>
+                </div>
 
-                    {/* Logo - Hide on mobile if space is tight, currently visible */}
-                    <Link href="/" className="flex items-center gap-2 group">
-                        {settings?.logoUrl ? (
-                            <img src={settings.logoUrl} alt="Logo" className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
-                        ) : (
-                            <span className="text-xl md:text-2xl font-black tracking-tighter uppercase transition-colors duration-300 text-foreground">
-                                {settings?.siteName?.toUpperCase() || 'MY SHOP'}<span className="text-primary">.</span>
-                            </span>
-                        )}
-                    </Link>
+                {/* Search Bar - Center/Floating */}
+                <div className="flex-1 max-w-xl">
+                    <div className="relative group">
+                        <input
+                            type="text"
+                            placeholder="Search products..."
+                            className="w-full bg-secondary/50 border-none rounded-full py-2.5 pl-10 pr-4 text-sm font-medium focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                        />
+                        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                    </div>
                 </div>
 
                 {/* Icons - Visible on all devices */}
-                <div className="flex items-center gap-2 md:gap-6">
-                    <ActiveLink href="/" icon={Home} label="Home" isScrolled={isScrolled} isExact={true} />
-                    <ActiveLink href="/shop" icon={ShoppingBag} label="Shop" isScrolled={isScrolled} />
+                <div className="flex items-center gap-1 md:gap-4 flex-shrink-0">
+                    <ActiveLink href="/" icon={Home} label="Home" isScrolled={isScrolled} isExact={true} className="hidden sm:flex" />
+                    <ActiveLink href="/shop" icon={ShoppingBag} label="Shop" isScrolled={isScrolled} className="hidden sm:flex" />
 
                     <button
                         onClick={() => setIsOpen(true)}
@@ -107,15 +93,13 @@ export function Header({ categories }) {
                             </span>
                         )}
                     </button>
-                    {/* Render CartSheet to ensure it exists in the DOM but without a visible trigger here */}
-                    <CartSheet />
                 </div>
             </div>
         </motion.header>
     )
 }
 
-function ActiveLink({ href, icon: Icon, label, isScrolled, isExact = false }) {
+function ActiveLink({ href, icon: Icon, label, isScrolled, isExact = false, className }) {
     const pathname = usePathname()
     const isActive = isExact ? pathname === href : pathname.startsWith(href)
 
@@ -127,7 +111,8 @@ function ActiveLink({ href, icon: Icon, label, isScrolled, isExact = false }) {
             // Hover states
             isScrolled ? "hover:bg-secondary hover:text-primary" : "hover:bg-secondary/50",
             // Active states
-            isActive && "bg-secondary text-primary"
+            isActive && "bg-secondary text-primary",
+            className
         )}>
             <Icon className="w-5 h-5 md:w-5 md:h-5" />
             <span className="hidden md:inline text-sm font-bold uppercase tracking-wider">{label}</span>

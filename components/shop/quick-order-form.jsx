@@ -24,11 +24,26 @@ export function QuickOrderForm({ product, cart, total: cartTotal }) {
 
     const router = useRouter()
 
-    if (!mounted) return (
-        <div className="bg-card border border-border shadow-md rounded-xl p-8 md:p-10 min-h-[600px] flex items-center justify-center">
-            <Loader2 className="w-8 h-8 animate-spin text-primary" />
-        </div>
-    )
+    const [formData, setFormData] = useState({
+        name: '',
+        phone: '',
+        address: ''
+    })
+
+    const calculateProgress = () => {
+        let completed = 0
+        if (formData.name.trim().length > 2) completed++
+        if (formData.phone.trim().length >= 11) completed++
+        if (formData.address.trim().length > 5) completed++
+        return Math.round((completed / 3) * 100)
+    }
+
+    const progress = calculateProgress()
+
+    const handleFieldChange = (e) => {
+        const { name, value } = e.target
+        setFormData(prev => ({ ...prev, [name]: value }))
+    }
 
     const deliveryCharge = area === 'inside-dhaka' ? 60 : 110
 
@@ -42,11 +57,11 @@ export function QuickOrderForm({ product, cart, total: cartTotal }) {
         const form = e.target.closest('form')
         if (!form) return
 
-        const formData = new FormData(form)
-        const name = formData.get('name')
-        const phone = formData.get('phone')
-        const address = formData.get('address')
-        const orderNote = formData.get('orderNote') || ''
+        const formDataObj = new FormData(form)
+        const name = formDataObj.get('name')
+        const phone = formDataObj.get('phone')
+        const address = formDataObj.get('address')
+        const orderNote = formDataObj.get('orderNote') || ''
 
         // Simple validation to avoid saving empty/unchanged data frequently
         if (!phone && !name) return
@@ -84,13 +99,16 @@ export function QuickOrderForm({ product, cart, total: cartTotal }) {
         }
     }
 
+    if (!mounted) return (
+        <div className="bg-card border border-border shadow-md rounded-xl p-8 md:p-10 min-h-[600px] flex items-center justify-center">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+    )
+
     async function handleSubmit(e) {
         e.preventDefault()
         setLoading(true)
 
-        const formData = new FormData(e.target)
-
-        // Prepare items based on whether it's a single product or cart
         const products = product
             ? [{
                 product: product._id,
@@ -104,14 +122,14 @@ export function QuickOrderForm({ product, cart, total: cartTotal }) {
             }))
 
         const orderData = {
-            customerName: formData.get('name'),
-            phone: formData.get('phone'),
-            address: formData.get('address'),
+            customerName: formData.name,
+            phone: formData.phone,
+            address: formData.address,
             area: area,
             products: products,
             deliveryCharge,
             totalAmount: total,
-            orderNote: formData.get('orderNote') || ''
+            orderNote: new FormData(e.target).get('orderNote') || ''
         }
 
         const res = await createOrder(orderData)
@@ -137,9 +155,21 @@ export function QuickOrderForm({ product, cart, total: cartTotal }) {
                 <div className="bg-primary text-primary-foreground p-3 rounded-2xl shadow-sm">
                     <Zap className="w-5 h-5 fill-primary-foreground" />
                 </div>
-                <div>
-                    <h3 className="text-sm font-black uppercase tracking-[0.2em] text-foreground">Express Order</h3>
-                    <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest opacity-60">Instant execution</p>
+                <div className="flex-1">
+                    <div className="flex justify-between items-end mb-1">
+                        <div>
+                            <h3 className="text-sm font-black uppercase tracking-[0.2em] text-foreground">Express Order</h3>
+                            <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest opacity-60">Instant execution</p>
+                        </div>
+                        <span className="text-[10px] font-black text-primary italic">{progress}% Complete</span>
+                    </div>
+                    {/* Progress Bar */}
+                    <div className="h-1.5 w-full bg-secondary rounded-full overflow-hidden border border-border/50">
+                        <div
+                            className="h-full bg-primary transition-all duration-500 ease-out"
+                            style={{ width: `${progress}%` }}
+                        />
+                    </div>
                 </div>
             </div>
 
@@ -154,6 +184,8 @@ export function QuickOrderForm({ product, cart, total: cartTotal }) {
                         name="name"
                         required
                         placeholder="Type your name..."
+                        value={formData.name}
+                        onChange={handleFieldChange}
                         onBlur={handleAutoSave}
                         className="h-14 rounded-2xl border-border bg-secondary/30 text-foreground placeholder:text-muted-foreground focus:border-primary focus:bg-card transition-all shadow-sm px-6"
                     />
@@ -171,6 +203,8 @@ export function QuickOrderForm({ product, cart, total: cartTotal }) {
                         inputMode="numeric"
                         required
                         placeholder="017xxxxxxxx"
+                        value={formData.phone}
+                        onChange={handleFieldChange}
                         onInput={(e) => {
                             // Remove non-numeric characters
                             e.target.value = e.target.value.replace(/[^0-9]/g, '');
@@ -195,6 +229,8 @@ export function QuickOrderForm({ product, cart, total: cartTotal }) {
                         name="address"
                         required
                         placeholder="House, Road, Area..."
+                        value={formData.address}
+                        onChange={handleFieldChange}
                         onBlur={handleAutoSave}
                         className="min-h-[120px] rounded-2xl border-border bg-secondary/30 text-foreground placeholder:text-muted-foreground focus:border-primary focus:bg-card transition-all p-6 shadow-sm resize-none"
                     />

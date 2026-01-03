@@ -3,8 +3,9 @@
 import dbConnect from "@/lib/db";
 import Settings from "@/models/Settings";
 import { revalidatePath } from "next/cache";
+import { cache } from "react";
 
-export async function getSettings() {
+export const getSettings = cache(async () => {
     await dbConnect();
     let settings = await Settings.findOne();
     if (!settings) {
@@ -16,7 +17,7 @@ export async function getSettings() {
 
     const finalSettings = { ...defaultSettings, ...JSON.parse(JSON.stringify(settings)) };
     return finalSettings;
-}
+});
 
 export async function updateSettings(data) {
     try {

@@ -27,6 +27,25 @@ export function CartSheet() {
                     </div>
                 </SheetHeader>
 
+                {cart.length > 0 && (
+                    <div className="px-4 py-3 bg-secondary/10 border-b border-border space-y-2">
+                        <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-wider">
+                            <span className="text-primary italic">
+                                {cartTotal >= 2000
+                                    ? "Free Shipping Unlocked! 🚀"
+                                    : `Spend ${formatCurrency(2000 - cartTotal)} more for Free Shipping`}
+                            </span>
+                            <span className="text-muted-foreground">{Math.min(100, Math.round((cartTotal / 2000) * 100))}%</span>
+                        </div>
+                        <div className="h-1.5 w-full bg-secondary rounded-full overflow-hidden border border-border/50">
+                            <div
+                                className="h-full bg-primary transition-all duration-500 ease-out"
+                                style={{ width: `${Math.min(100, (cartTotal / 2000) * 100)}%` }}
+                            />
+                        </div>
+                    </div>
+                )}
+
                 <div className="flex-1 overflow-y-auto px-4 py-4 no-scrollbar bg-background">
                     {cart.length === 0 ? (
                         <div className="flex h-full flex-col items-center justify-center gap-4">

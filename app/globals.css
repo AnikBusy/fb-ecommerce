@@ -69,6 +69,25 @@
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-muted-foreground/30;
   }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    height: 3px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    transition: all 0.3s;
+  }
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    opacity: 0.5;
+  }
 }
 
 @layer components {

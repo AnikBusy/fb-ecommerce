@@ -3,12 +3,12 @@
 import dbConnect from "@/lib/db";
 import Category from "@/models/Category";
 import { revalidatePath } from "next/cache";
+import { cache } from "react";
 
-export async function getCategories() {
+export const getCategories = cache(async () => {
     await dbConnect();
     try {
         const categories = await Category.find({})
-            .populate({ path: 'parent', strictPopulate: false })
             .sort({ createdAt: -1 })
             .lean();
         return JSON.parse(JSON.stringify(categories));
@@ -16,7 +16,7 @@ export async function getCategories() {
         console.error("Failed to fetch categories:", error);
         return [];
     }
-}
+});
 
 export async function getCategoryBySlug(slug) {
     await dbConnect();

@@ -21,7 +21,7 @@ export const metadata = {
   description: "Best products at best prices",
 };
 
-export const dynamic = 'force-dynamic';
+// // export const dynamic = 'force-dynamic';
 
 export default async function RootLayout({ children }) {
   const settings = await getSettings();

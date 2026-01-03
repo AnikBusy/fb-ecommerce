@@ -35,7 +35,7 @@ export function CartProvider({ children }) {
         }
     }, [cart, isMounted])
 
-    const addToCart = (product, quantity = 1) => {
+    const addToCart = (product, quantity = 1, openCart = true) => {
         setCart(prev => {
             const existing = prev.find(item => item.product._id === product._id)
             if (existing) {
@@ -47,7 +47,9 @@ export function CartProvider({ children }) {
             }
             return [...prev, { product, quantity }]
         })
-        setIsOpen(true)
+        if (openCart) {
+            setIsOpen(true)
+        }
     }
 
     const removeFromCart = (productId) => {

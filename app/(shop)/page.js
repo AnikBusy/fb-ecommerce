@@ -35,9 +35,14 @@ export default async function HomePage() {
 
     return (
         <div className="pb-5 overflow-hidden">
-            {/* 1. Hero Section - Full Width Banner */}
-            <section className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] ">
-                <div className="h-[30vh] md:h-[60vh] relative overflow-hidden shadow-lg border border-border">
+            {/* 1. Rolling Categories Section - Now at Top */}
+            <div className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] px-4 md:px-0 mt-4 md:mt-8">
+                <CategorySlider categories={categories} />
+            </div>
+
+            {/* 2. Hero Section - Full Width Banner */}
+            <section className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] mt-4 md:mt-8">
+                <div className="h-[30vh] md:h-[60vh] relative overflow-hidden shadow-lg border border-border rounded-2xl">
                     {heroBanners.length > 0 ? (
                         <BannerCarousel banners={heroBanners} />
                     ) : (
@@ -50,9 +55,6 @@ export default async function HomePage() {
             <div className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] px-4 md:px-0 space-y-12 md:space-y-24 mt-8 md:mt-16">
 
 
-
-                {/* 2. Rolling Categories Section */}
-                <CategorySlider categories={categories} />
 
                 {/* 3. New Added Products (Just Arrived) */}
                 <section className="relative">

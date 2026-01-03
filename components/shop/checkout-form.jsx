@@ -21,6 +21,12 @@ export function CheckoutForm() {
     const [deliveryCharge, setDeliveryCharge] = useState(60)
     const router = useRouter()
 
+    const [formValues, setFormValues] = useState({
+        name: '',
+        phone: '',
+        address: ''
+    })
+
     useEffect(() => {
         if (area === 'inside-dhaka') {
             setDeliveryCharge(60)
@@ -28,6 +34,21 @@ export function CheckoutForm() {
             setDeliveryCharge(110)
         }
     }, [area])
+
+    const calculateProgress = () => {
+        let completed = 0
+        if (formValues.name.trim().length > 2) completed++
+        if (formValues.phone.trim().length >= 11) completed++
+        if (formValues.address.trim().length > 5) completed++
+        return Math.round((completed / 3) * 100)
+    }
+
+    const progress = calculateProgress()
+
+    const handleFieldChange = (e) => {
+        const { name, value } = e.target
+        setFormValues(prev => ({ ...prev, [name]: value }))
+    }
 
     const subtotal = cartTotal
     const total = subtotal + deliveryCharge
@@ -47,9 +68,9 @@ export function CheckoutForm() {
         const formData = new FormData(e.target)
 
         const orderData = {
-            customerName: formData.get('name'),
-            phone: formData.get('phone'),
-            address: formData.get('address'),
+            customerName: formValues.name,
+            phone: formValues.phone,
+            address: formValues.address,
             area: area,
             deliveryCharge: deliveryCharge,
             totalAmount: total,
@@ -66,8 +87,6 @@ export function CheckoutForm() {
         if (res.success) {
             clearCart()
             toast.success('Order placed successfully!', { duration: 5000 })
-            // Immediate partial update or optimistic UI could go here, 
-            // but for now, we just push immediately.
             router.push(`/order-success/${res.order._id}`)
         } else {
             setLoading(false)
@@ -77,14 +96,30 @@ export function CheckoutForm() {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Delivery Information</CardTitle>
-                </CardHeader>
+            <Card className="overflow-hidden border-none shadow-lg">
+                <div className="bg-secondary/20 p-4 border-b border-border">
+                    <div className="flex justify-between items-end mb-2">
+                        <CardTitle className="text-lg font-black uppercase tracking-tighter">Delivery Information</CardTitle>
+                        <span className="text-[10px] font-black text-primary italic">{progress}% Complete</span>
+                    </div>
+                    <div className="h-1.5 w-full bg-secondary rounded-full overflow-hidden border border-border/50">
+                        <div
+                            className="h-full bg-primary transition-all duration-500 ease-out"
+                            style={{ width: `${progress}%` }}
+                        />
+                    </div>
+                </div>
                 <CardContent className="grid gap-4">
                     <div className="grid gap-2">
                         <Label htmlFor="name">Full Name</Label>
-                        <Input id="name" name="name" required placeholder="Enter your name" />
+                        <Input
+                            id="name"
+                            name="name"
+                            required
+                            placeholder="Enter your name"
+                            value={formValues.name}
+                            onChange={handleFieldChange}
+                        />
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="phone">Phone Number</Label>
@@ -96,6 +131,8 @@ export function CheckoutForm() {
                             inputMode="numeric"
                             required
                             placeholder="017xxxxxxxx"
+                            value={formValues.phone}
+                            onChange={handleFieldChange}
                             onInput={(e) => {
                                 e.target.value = e.target.value.replace(/[^0-9]/g, '');
                                 if (e.target.validity.patternMismatch) {
@@ -108,7 +145,14 @@ export function CheckoutForm() {
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="address">Full Address</Label>
-                        <Textarea id="address" name="address" required placeholder="House, Road, Area..." />
+                        <Textarea
+                            id="address"
+                            name="address"
+                            required
+                            placeholder="House, Road, Area..."
+                            value={formValues.address}
+                            onChange={handleFieldChange}
+                        />
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="orderNote">Customer Note</Label>

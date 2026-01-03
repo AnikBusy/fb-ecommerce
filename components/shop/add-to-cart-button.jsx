@@ -17,12 +17,11 @@ export function AddToCartButton({ product, variant = "default", size = "default"
         e.stopPropagation()
         setLoading(true)
 
-        addToCart(product)
-
         if (variant === "order") {
+            addToCart(product, 1, false)
             router.push('/checkout')
         } else {
-            setIsOpen(true)
+            addToCart(product)
         }
 
         setLoading(false)
@@ -47,12 +46,12 @@ export function AddToCartButton({ product, variant = "default", size = "default"
                 onClick={handleAction}
                 disabled={loading}
                 className={cn(
-                    "bg-primary text-primary-foreground hover:bg-primary/95 font-black uppercase tracking-widest text-xs h-14 transition-all active:scale-95 group border-none shadow-[0_10px_30px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_30px_rgba(255,255,255,0.05)]",
+                    "bg-primary text-primary-foreground hover:bg-primary/95 font-black uppercase tracking-widest text-[11px] h-14 md:h-16 transition-all active:scale-95 group border-none shadow-[0_10px_30px_rgba(0,0,0,0.1)]",
                     className
                 )}
             >
                 {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Zap className="mr-2 h-4 w-4 fill-primary-foreground" />}
-                Place Order
+                Buy Now
             </Button>
         )
     }
@@ -63,12 +62,12 @@ export function AddToCartButton({ product, variant = "default", size = "default"
             onClick={handleAction}
             disabled={loading}
             className={cn(
-                "border-zinc-200 dark:border-zinc-800 text-foreground hover:bg-zinc-100 dark:hover:bg-zinc-900 font-black uppercase tracking-widest text-[10px] h-14 transition-all active:scale-95",
+                "border-zinc-200 dark:border-zinc-800 text-foreground hover:bg-zinc-100 dark:hover:bg-zinc-900 font-black uppercase tracking-widest text-[11px] h-14 md:h-16 transition-all active:scale-95",
                 className
             )}
         >
             {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ShoppingCart className="mr-2 h-4 w-4" />}
-            BUY
+            Add to Cart
         </Button>
     )
 }

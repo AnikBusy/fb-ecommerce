@@ -75,12 +75,19 @@ export default async function ProductPage({ params }) {
                                 )}
                             </div>
 
-                            {/* Left Add to cart button and Mobile screen fixed bottom */}
-                            <div className="fixed bottom-6 right-6 z-50 md:static md:block">
-                                <AddToCartButton
-                                    product={serializedProduct}
-                                    className="w-auto px-8 md:w-full h-16 md:h-20 rounded-full text-[10px] uppercase tracking-[0.3em] font-black shadow-2xl md:shadow-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:scale-105 active:scale-95 border-none"
-                                />
+                            {/* Action Buttons */}
+                            <div className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-background/80 backdrop-blur-md border-t border-border md:static md:p-0 md:bg-transparent md:border-none">
+                                <div className="grid grid-cols-2 gap-4 max-w-[1440px] mx-auto lg:w-[100%]">
+                                    <AddToCartButton
+                                        product={serializedProduct}
+                                        className="rounded-full shadow-lg"
+                                    />
+                                    <AddToCartButton
+                                        product={serializedProduct}
+                                        variant="order"
+                                        className="rounded-full shadow-lg"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
