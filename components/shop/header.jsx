@@ -39,12 +39,22 @@ export function Header({ categories }) {
         <motion.header
             className={cn(
                 "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-                // Show background on scroll OR if not on special transparent pages
-                isScrolled || (!isHome && pathname !== '/shop' && !pathname.startsWith('/product/') && pathname !== '/checkout' && !pathname.startsWith('/category/'))
-                    ? "h-16 bg-background/95 backdrop-blur-md"
-                    : "h-24 bg-transparent absolute"
+                // Complex Header Logic:
+                // 1. Home + Scrolled = Primary Tint
+                // 2. Scrolled OR Standard Page = Standard White
+                // 3. Home/Shop/Product (Top) = Transparent
+                (isScrolled && isHome)
+                    ? "h-16 bg-primary/15 backdrop-blur-md shadow-sm border-b border-primary/20"
+                    : (isScrolled || (!isHome && pathname !== '/shop' && !pathname.startsWith('/product/') && pathname !== '/checkout' && !pathname.startsWith('/category/')))
+                        ? "h-16 bg-background/95 backdrop-blur-md shadow-sm"
+                        : "h-24 bg-transparent absolute"
             )}
         >
+            {/* Extended Gradient Background for Home Page */}
+            {!isScrolled && isHome && (
+                <div className="absolute top-0 left-0 right-0 h-[220px] bg-gradient-to-b from-primary/20 via-primary/10 to-transparent -z-10 pointer-events-none transition-all duration-500" />
+            )}
+
             <div className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] h-full px-4 md:px-0 flex items-center justify-between gap-4">
                 <div className="flex items-center gap-4 flex-shrink-0">
                     {/* Logo/Back Arrow Section */}
