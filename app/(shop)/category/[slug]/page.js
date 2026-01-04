@@ -12,9 +12,16 @@ export async function generateMetadata({ params }) {
     const category = await getCategoryBySlug(slug)
     if (!category) return { title: 'Category Not Found' }
 
+    const title = `${category.name} | Collection`
+    const description = `Explore our ${category.name} collection.`
+
     return {
-        title: `${category.name} | Collection`,
-        description: `Explore our ${category.name} collection.`,
+        title: title,
+        description: description,
+        openGraph: {
+            title: title,
+            description: description,
+        },
     }
 }
 

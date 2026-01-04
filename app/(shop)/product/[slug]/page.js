@@ -14,9 +14,29 @@ export async function generateMetadata({ params }) {
     const product = await getProduct(slug)
     if (!product) return { title: 'Product Not Found' }
 
+    const title = product.title
+    const description = product.description.substring(0, 160)
+    const images = product.images || []
+
     return {
-        title: product.title,
-        description: product.description.substring(0, 160),
+        title: title,
+        description: description,
+        openGraph: {
+            title: title,
+            description: description,
+            images: images.map(url => ({
+                url: url,
+                width: 800,
+                height: 600,
+                alt: title,
+            })),
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: title,
+            description: description,
+            images: images,
+        },
     }
 }
 
@@ -28,11 +48,19 @@ export default async function ProductPage({ params }) {
         notFound()
     }
 
-    const relatedProducts = await getProducts({
+    let relatedProducts = await getProducts({
         category: product.category?._id,
         _id: { $ne: product._id },
         isActive: true
     }).then(list => list.slice(0, 10))
+
+    // Fallback: If no related products in category, show random/latest products
+    if (relatedProducts.length === 0) {
+        relatedProducts = await getProducts({
+            _id: { $ne: product._id },
+            isActive: true
+        }).then(list => list.slice(0, 10))
+    }
 
     // Serialize to plain objects for client components
     const serializedProduct = JSON.parse(JSON.stringify(product))
@@ -107,8 +135,18 @@ export default async function ProductPage({ params }) {
                     </div>
                 </div>
 
+                {/* Related Products Section via Swiper */}
+                {serializedRelated.length > 0 && (
+                    <div className="mt-12 md:mt-20 space-y-8">
+                        <div className="flex items-end justify-between border-b border-border pb-4">
+                            <h2 className="text-xl md:text-3xl font-black uppercase tracking-tighter text-foreground">You May Also Like</h2>
+                        </div>
+                        <ProductSwiper products={serializedRelated} />
+                    </div>
+                )}
+
                 {/* Details */}
-                <div className="mt-12 md:mt-20">
+                <div className="mt-20">
                     <div className="space-y-6">
                         <div className="flex items-center gap-4 pb-4 border-b border-border">
                             <h2 className="text-xl md:text-2xl font-black uppercase tracking-tighter text-foreground flex items-center gap-2">
@@ -121,16 +159,6 @@ export default async function ProductPage({ params }) {
                         </div>
                     </div>
                 </div>
-
-                {/* Related Products Section via Swiper */}
-                {serializedRelated.length > 0 && (
-                    <div className="mt-20 space-y-8">
-                        <div className="flex items-end justify-between border-b border-border pb-4">
-                            <h2 className="text-xl md:text-3xl font-black uppercase tracking-tighter text-foreground">You May Also Like</h2>
-                        </div>
-                        <ProductSwiper products={serializedRelated} />
-                    </div>
-                )}
             </div>
 
             {/* Mobile Bottom Actions */}

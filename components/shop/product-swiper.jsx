@@ -17,18 +17,18 @@ export function ProductSwiper({ products }) {
         <div className="relative group/swiper">
             <Swiper
                 onSwiper={(swiper) => swiperRef.current = swiper}
-                slidesPerView={2.2}
-                spaceBetween={16}
+                slidesPerView={2.6}
+                spaceBetween={12}
                 freeMode={true}
                 modules={[FreeMode, Navigation]}
                 breakpoints={{
                     640: {
-                        slidesPerView: 3.2,
-                        spaceBetween: 20,
+                        slidesPerView: 3.6,
+                        spaceBetween: 16,
                     },
                     1024: {
-                        slidesPerView: 4.5,
-                        spaceBetween: 24,
+                        slidesPerView: 5.5,
+                        spaceBetween: 20,
                     },
                 }}
                 className="w-full !overflow-visible"

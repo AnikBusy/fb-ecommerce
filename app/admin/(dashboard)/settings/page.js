@@ -48,6 +48,8 @@ export default function SettingsPage() {
         tiktokUrl: '',
         youtubeUrl: '',
         whatsappNumber: '',
+        googleAnalyticsId: '',
+        faviconUrl: '',
     })
 
     const [selectedCourier, setSelectedCourier] = useState('steadfast')
@@ -70,7 +72,7 @@ export default function SettingsPage() {
         setFormData(prev => ({ ...prev, [name]: checked }))
     }
 
-    const handleImageUpload = async (e) => {
+    const handleImageUpload = async (e, field = 'logoUrl') => {
         const file = e.target.files[0]
         if (!file) return
 
@@ -83,7 +85,7 @@ export default function SettingsPage() {
         })
         const json = await res.json()
         if (json.url) {
-            setFormData(prev => ({ ...prev, logoUrl: json.url }))
+            setFormData(prev => ({ ...prev, [field]: json.url }))
         }
     }
 
@@ -141,7 +143,16 @@ export default function SettingsPage() {
                                     {formData.logoUrl && (
                                         <img src={formData.logoUrl} alt="Logo" className="h-12 w-12 object-contain border rounded" />
                                     )}
-                                    <Input type="file" onChange={handleImageUpload} accept="image/*" />
+                                    <Input type="file" onChange={(e) => handleImageUpload(e, 'logoUrl')} accept="image/*" />
+                                </div>
+                            </div>
+                            <div className="grid gap-2">
+                                <Label>Favicon</Label>
+                                <div className="flex items-center gap-4">
+                                    {formData.faviconUrl && (
+                                        <img src={formData.faviconUrl} alt="Favicon" className="h-12 w-12 object-contain border rounded" />
+                                    )}
+                                    <Input type="file" onChange={(e) => handleImageUpload(e, 'faviconUrl')} accept="image/*" />
                                 </div>
                             </div>
                         </CardContent>
@@ -176,12 +187,12 @@ export default function SettingsPage() {
                         <CardHeader>
                             <div className="flex items-center justify-between">
                                 <div className="space-y-1">
-                                    <CardTitle>Facebook Pixel & CAPI</CardTitle>
-                                    <CardDescription>Configure your tracking and marketing events.</CardDescription>
+                                    <CardTitle>Analytics & Tracking</CardTitle>
+                                    <CardDescription>Configure Facebook Pixel, Google Analytics, and other tracking.</CardDescription>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Label htmlFor="isPixelActive" className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                                        {formData.isPixelActive ? 'Active' : 'Inactive'}
+                                        {formData.isPixelActive ? 'Pixel Active' : 'Pixel Inactive'}
                                     </Label>
                                     <Switch
                                         id="isPixelActive"
@@ -192,6 +203,10 @@ export default function SettingsPage() {
                             </div>
                         </CardHeader>
                         <CardContent className="space-y-4">
+                            <div className="grid gap-2">
+                                <Label>Google Analytics ID (G-XXXXXXXXXX)</Label>
+                                <Input name="googleAnalyticsId" value={formData.googleAnalyticsId || ''} onChange={handleChange} placeholder="e.g. G-12345678" />
+                            </div>
                             <div className="grid gap-2">
                                 <Label>Facebook Pixel ID</Label>
                                 <Input name="facebookPixelId" value={formData.facebookPixelId} onChange={handleChange} placeholder="e.g. 1234567890" />

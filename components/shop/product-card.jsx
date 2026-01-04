@@ -20,14 +20,14 @@ export function ProductCard({ product }) {
             className="group relative flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg rounded-xl bg-card border border-border/50"
         >
             {/* Image Container */}
-            <Link href={`/product/${product.slug}`} className="relative aspect-[1/1] overflow-hidden bg-secondary/10">
+            <Link href={`/product/${product.slug}`} className="relative aspect-[1/1] overflow-hidden bg-secondary/10 p-3">
                 {product.images && product.images[0] ? (
                     <motion.img
                         whileHover={{ scale: 1.05 }}
                         transition={{ duration: 0.4 }}
                         src={product.images[0]}
                         alt={product.title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover rounded-lg"
                     />
                 ) : (
                     <div className="flex items-center justify-center h-full text-zinc-300">

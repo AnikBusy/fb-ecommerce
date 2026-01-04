@@ -80,7 +80,7 @@ export function CategorySlider({ categories, isSticky = false, activeSlug = "", 
                     onMouseUp={handleMouseUp}
                     onMouseMove={handleMouseMove}
                     className={cn(
-                        "flex overflow-x-auto overflow-y-hidden px-4 gap-3 md:gap-4 select-none items-center scrollbar-hide", // hidden scrollbar
+                        "flex overflow-x-auto overflow-y-hidden px-4 gap-3 md:gap-4 select-none items-center scrollbar-hide [&::-webkit-scrollbar]:hidden", // hidden scrollbar
                         isDragging ? "cursor-grabbing" : "cursor-grab",
                         (scrolled || isTextVariant) ? "pb-0" : "pb-4"
                     )}>
