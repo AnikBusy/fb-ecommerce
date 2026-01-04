@@ -1,10 +1,9 @@
 import { getProducts } from "@/actions/product"
 import { getCategories } from "@/actions/category"
 import { ProductCard } from "@/components/shop/product-card"
-import { Card, CardContent } from "@/components/ui/card"
+import { CategorySlider } from "@/components/shop/category-slider"
 import Link from "next/link"
 import { Filter, Grid3X3, List } from "lucide-react"
-import { CategorySidebar } from "@/components/shop/category-sidebar"
 import * as motion from "framer-motion/client"
 
 export const dynamic = 'force-dynamic';
@@ -18,29 +17,26 @@ export default async function ShopPage() {
     const serializedCategories = JSON.parse(JSON.stringify(categories))
 
     return (
-        <div className="py-12 md:py-24 min-h-screen max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] px-4 md:px-0">
-            <div className="flex flex-col gap-12 md:gap-20">
-                {/* Header Section */}
-                <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="space-y-3"
-                >
-                    <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">All Collection</h1>
-                    <p className="text-muted-foreground text-xs md:text-base max-w-xl italic font-medium leading-relaxed">Explore our items</p>
-                </motion.div>
+        <div className="min-h-screen bg-background">
+            {/* Sticky Category Slider - No Images, Text Only */}
+            <CategorySlider categories={serializedCategories} variant="text" isSticky={true} />
 
-                <div className="grid lg:grid-cols-4 gap-12 md:gap-20">
-                    {/* Sidebar - Desktop Only */}
-                    <aside className="hidden lg:block h-fit sticky top-24">
-                        <div className="rounded-2xl border border-zinc-100 dark:border-zinc-800 overflow-hidden">
-                            <CategorySidebar categories={serializedCategories} />
-                        </div>
-                    </aside>
+            <div className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] px-4 md:px-0 py-8 md:py-12">
 
-                    {/* Product Grid */}
-                    <div className="w-full lg:col-span-3">
+                <div className="flex flex-col gap-8">
+                    {/* Header Section */}
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="space-y-3 pb-6 border-b border-border/50"
+                    >
+                        <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">All Collection</h1>
+                        <p className="text-muted-foreground text-xs md:text-base max-w-xl italic font-medium leading-relaxed">Explore our items</p>
+                    </motion.div>
+
+                    {/* Product Grid - Full Width */}
+                    <div>
                         <motion.div
                             initial="hidden"
                             animate="visible"
@@ -51,7 +47,7 @@ export default async function ShopPage() {
                                     }
                                 }
                             }}
-                            className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-10"
+                            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-8"
                         >
                             {serializedProducts.map((product) => (
                                 <motion.div

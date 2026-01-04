@@ -7,10 +7,12 @@ import { Minus, Plus, ShoppingBag } from "lucide-react"
 import Link from "next/link"
 import { formatCurrency } from "@/lib/utils"
 import { useState, useEffect } from "react"
+import { useMobile } from "@/hooks/use-mobile"
 
 export function CartSheet() {
     const { cart, isOpen, setIsOpen, updateQuantity, removeFromCart, cartTotal } = useCart()
     const [mounted, setMounted] = useState(false)
+    const isMobile = useMobile()
 
     useEffect(() => {
         setMounted(true)
@@ -20,31 +22,20 @@ export function CartSheet() {
 
     return (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetContent className="w-full sm:max-w-md flex flex-col bg-card border-l border-border text-foreground p-0 shadow-2xl">
+            <SheetContent
+                side={isMobile ? "bottom" : "right"}
+                className={isMobile
+                    ? "w-full h-[85vh] rounded-t-[20px] px-0 flex flex-col bg-card border-t border-border shadow-2xl"
+                    : "w-full sm:max-w-md flex flex-col bg-card border-l border-border text-foreground p-0 shadow-2xl"
+                }
+            >
                 <SheetHeader className="p-4 border-b border-border bg-secondary/20">
                     <div className="flex items-center justify-between">
                         <SheetTitle className="text-lg font-black uppercase tracking-tighter text-foreground">Cart Manifest</SheetTitle>
                     </div>
                 </SheetHeader>
 
-                {cart.length > 0 && (
-                    <div className="px-4 py-3 bg-secondary/10 border-b border-border space-y-2">
-                        <div className="flex justify-between items-center text-[9px] font-black uppercase tracking-wider">
-                            <span className="text-primary italic">
-                                {cartTotal >= 2000
-                                    ? "Free Shipping Unlocked! 🚀"
-                                    : `Spend ${formatCurrency(2000 - cartTotal)} more for Free Shipping`}
-                            </span>
-                            <span className="text-muted-foreground">{Math.min(100, Math.round((cartTotal / 2000) * 100))}%</span>
-                        </div>
-                        <div className="h-1.5 w-full bg-secondary rounded-full overflow-hidden border border-border/50">
-                            <div
-                                className="h-full bg-primary transition-all duration-500 ease-out"
-                                style={{ width: `${Math.min(100, (cartTotal / 2000) * 100)}%` }}
-                            />
-                        </div>
-                    </div>
-                )}
+
 
                 <div className="flex-1 overflow-y-auto px-4 py-4 no-scrollbar bg-background">
                     {cart.length === 0 ? (
@@ -99,7 +90,7 @@ export function CartSheet() {
                 </div>
 
                 {cart.length > 0 && (
-                    <div className="p-6 bg-card border-t border-border space-y-4 shadow-[0_-10px_30px_rgba(0,0,0,0.03)]">
+                    <div className="p-6 bg-card border-t border-border space-y-4 shadow-[0_-10px_30px_rgba(0,0,0,0.03)] pb-safe">
                         <div className="flex justify-between items-end">
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Subtotal</span>
                             <span className="text-2xl font-black text-foreground italic tracking-tighter drop-shadow-sm">{formatCurrency(cartTotal)}</span>

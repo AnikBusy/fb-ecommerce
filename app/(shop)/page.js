@@ -4,6 +4,7 @@ import { getCategories } from "@/actions/category"
 import { ProductCard } from "@/components/shop/product-card"
 import { CategorySlider } from "@/components/shop/category-slider"
 import { BannerCarousel } from "@/components/shop/banner-carousel"
+import { ProductSwiper } from "@/components/shop/product-swiper"
 import { CategorySidebar } from "@/components/shop/category-sidebar"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
@@ -54,8 +55,6 @@ export default async function HomePage() {
             {/* Container for Centered Content */}
             <div className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] px-4 md:px-0 space-y-12 md:space-y-24 mt-8 md:mt-16">
 
-
-
                 {/* 3. New Added Products (Just Arrived) */}
                 <section className="relative">
                     <div className="absolute -top-40 -left-40 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[150px] pointer-events-none"></div>
@@ -75,16 +74,13 @@ export default async function HomePage() {
                                     <ArrowRight className="w-3.5 h-3.5 text-primary-foreground transition-transform group-hover:translate-x-1" />
                                 </Link>
                             </div>
-                            <div className="grid grid-cols-2 lg:grid-cols-6 gap-6 md:gap-4">
-                                {serializedNewProducts.slice(0, 6).map((product) => (
-                                    <ProductCard key={product._id} product={product} />
-                                ))}
-                            </div>
+                        </div>
+                        <div className="mt-8">
+                            <ProductSwiper products={serializedNewProducts} />
                         </div>
                     </div>
                 </section>
 
-                {/* 4. Best Selling Products */}
                 {/* 4. Best Selling Products: Premium Redesign */}
                 <section className="relative py-12 md:py-32">
                     {/* Background Accents */}
@@ -104,21 +100,12 @@ export default async function HomePage() {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 relative z-10">
-                        {serializedBestSelling.map((product, idx) => (
-                            <div key={product._id} className={`transform transition-all duration-500 hover:-translate-y-2 ${idx % 2 === 0 ? 'md:translate-y-8' : ''}`}>
-                                <ProductCard product={product} />
-                            </div>
-                        ))}
+                    <div className="relative z-10 mt-8">
+                        <ProductSwiper products={serializedBestSelling} />
                     </div>
                 </section>
 
                 {/* 5. Promotional Banners: Premium Glassmorphism Redesign */}
-                {/* 5. Promotional Banners: Premium Feature Section */}
-
-
-
-                {/* 5. Promotional Banners: Hero Style Redesign */}
                 {serializedPromoBanners.length > 0 && (() => {
                     const promo = serializedPromoBanners[0];
                     return (
@@ -130,7 +117,7 @@ export default async function HomePage() {
                                     alt={promo.title || "Promotional Banner"}
                                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                                 />
-                                {/* Overlay Gradient - Darker for better text readability */}
+                                {/* Overlay Gradient */}
                                 <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors duration-700"></div>
                             </div>
 

@@ -1,8 +1,10 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { FacebookPixel } from "@/components/facebook-pixel";
+import { GoogleAnalytics } from "@/components/google-analytics";
 import { getSettings } from "@/actions/settings";
 import { Toaster } from "sonner";
+import { SettingsProvider } from "@/providers/settings-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,14 +16,22 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-import { SettingsProvider } from "@/providers/settings-provider";
+export async function generateMetadata() {
+  const settings = await getSettings();
 
-export const metadata = {
-  title: "Facebook E-commerce Shop",
-  description: "Best products at best prices",
-};
-
-// // export const dynamic = 'force-dynamic';
+  return {
+    title: {
+      default: settings?.siteName || "Facebook E-commerce Shop",
+      template: `%s | ${settings?.siteName || "Shop"}`
+    },
+    description: "Best products at best prices",
+    icons: {
+      icon: settings?.faviconUrl || '/favicon.ico',
+      shortcut: settings?.faviconUrl || '/favicon.ico',
+      apple: settings?.faviconUrl || '/favicon.ico',
+    }
+  };
+}
 
 export default async function RootLayout({ children }) {
   const settings = await getSettings();
@@ -34,6 +44,7 @@ export default async function RootLayout({ children }) {
         <SettingsProvider initialSettings={settings}>
           {children}
           <FacebookPixel />
+          <GoogleAnalytics />
           <Toaster richColors position="top-right" />
         </SettingsProvider>
       </body>

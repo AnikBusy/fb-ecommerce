@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
 const SettingsSchema = new mongoose.Schema({
     siteName: { type: String, default: 'My Shop' },
     logoUrl: { type: String, default: '' },
+    faviconUrl: { type: String, default: '' },
+    googleAnalyticsId: { type: String, default: '' },
     facebookPixelId: { type: String, default: '' },
     facebookAccessToken: { type: String, default: '' },
     isPixelActive: { type: Boolean, default: false },

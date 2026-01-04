@@ -1,4 +1,5 @@
 import { Header } from "@/components/shop/header"
+import { MobileNavbar } from "@/components/shop/mobile-navbar"
 import { Footer } from "@/components/shop/footer"
 import { CartProvider } from "@/providers/cart-provider"
 import { CartSheet } from "@/components/shop/cart-sheet"
@@ -17,6 +18,7 @@ export default async function ShopLayout({ children }) {
                 </main>
                 <Footer />
                 <CartSheet />
+                <MobileNavbar />
             </div>
         </CartProvider>
     )

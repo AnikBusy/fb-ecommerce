@@ -6,7 +6,7 @@ import { ArrowRight } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
 
-export function CategorySlider({ categories, isSticky = false, activeSlug = "" }) {
+export function CategorySlider({ categories, isSticky = false, activeSlug = "", variant = "default" }) {
     const [scrolled, setScrolled] = useState(false)
     const scrollRef = useRef(null)
     const [isDragging, setIsDragging] = useState(false)
@@ -18,7 +18,7 @@ export function CategorySlider({ categories, isSticky = false, activeSlug = "" }
         if (!isSticky) return
 
         const handleScroll = () => {
-            setScrolled(window.scrollY > 100)
+            setScrolled(window.scrollY > 50)
         }
 
         window.addEventListener('scroll', handleScroll)
@@ -55,14 +55,20 @@ export function CategorySlider({ categories, isSticky = false, activeSlug = "" }
         scrollRef.current.scrollLeft = scrollLeft - walk
     }
 
+    const isTextVariant = variant === 'text';
+
     return (
         <section className={cn(
-            "py-4 overflow-hidden",
-            isSticky && "sticky top-16 z-40 bg-background/80 backdrop-blur-md border-b border-border/50",
-            isSticky && scrolled ? "py-2" : "py-4"
+            "overflow-hidden transition-all duration-300",
+            isSticky && "sticky top-20 z-40 bg-background/95 backdrop-blur-md border-b border-border/50", // Adjusted top-20 to sit below header or at top if header scroll away (but layout suggests header is sticky?)
+            // If header is hidden on scroll, top-0 is better. If header stays, top-16/20.
+            // User said "header should not stick on top". So header scrolls away. Thus Sticky Slider should potentially be top-0.
+            // But let's assume standard behavior first. If Header is static (absolute/scrolls away), then Sticky Slider needs top-0 when it hits top.
+            isSticky && "top-16",
+            isTextVariant ? "py-3" : (isSticky && scrolled ? "py-2" : "py-4")
         )}>
 
-            {!scrolled && (
+            {!scrolled && !isTextVariant && (
                 <div className="h-4"></div>
             )}
 
@@ -74,9 +80,9 @@ export function CategorySlider({ categories, isSticky = false, activeSlug = "" }
                     onMouseUp={handleMouseUp}
                     onMouseMove={handleMouseMove}
                     className={cn(
-                        "flex overflow-x-auto overflow-y-hidden px-4 gap-4 md:gap-8 custom-scrollbar select-none",
+                        "flex overflow-x-auto overflow-y-hidden px-4 gap-3 md:gap-4 select-none items-center scrollbar-hide", // hidden scrollbar
                         isDragging ? "cursor-grabbing" : "cursor-grab",
-                        scrolled ? "pb-2" : "pb-4"
+                        (scrolled || isTextVariant) ? "pb-0" : "pb-4"
                     )}>
                     {categories.map((cat) => {
                         const isActive = cat.slug === activeSlug;
@@ -91,12 +97,19 @@ export function CategorySlider({ categories, isSticky = false, activeSlug = "" }
                                     }
                                 }}
                                 className={cn(
-                                    "flex-shrink-0 group flex flex-col items-center gap-3",
-                                    scrolled ? "w-auto px-4 py-1.5 bg-secondary/50 rounded-full border border-transparent hover:border-primary/30" : "w-[68px] md:w-[90px]",
-                                    isActive && scrolled && "bg-primary/10 border-primary/30"
+                                    "flex-shrink-0 group flex flex-col items-center gap-2 transition-all",
+                                    // Text Variant Styling
+                                    isTextVariant || scrolled
+                                        ? cn(
+                                            "w-auto px-4 py-2 rounded-full border transition-all",
+                                            isActive
+                                                ? "bg-primary text-primary-foreground border-primary"
+                                                : "bg-secondary/50 text-foreground border-transparent hover:bg-secondary hover:border-primary/20"
+                                        )
+                                        : "w-[68px] md:w-[90px]",
                                 )}
                             >
-                                {!scrolled && (
+                                {!scrolled && !isTextVariant && (
                                     <div className={cn(
                                         "relative w-full aspect-square rounded-2xl overflow-hidden border border-border shadow-sm bg-card group-hover:border-primary/50 group-hover:shadow-md flex items-center justify-center",
                                         isActive && "border-primary shadow-md"
@@ -118,8 +131,8 @@ export function CategorySlider({ categories, isSticky = false, activeSlug = "" }
                                 )}
                                 <span className={cn(
                                     "font-bold uppercase tracking-tight text-center transition-colors line-clamp-1",
-                                    scrolled ? "text-[8px] md:text-[9px] text-foreground" : "text-[10px] md:text-[11px] text-foreground/70 group-hover:text-primary",
-                                    isActive && (scrolled ? "text-primary" : "text-primary font-black")
+                                    (scrolled || isTextVariant) ? "text-[11px] md:text-xs" : "text-[11px] md:text-sm text-foreground/70 group-hover:text-primary", // Increased font size
+                                    !isTextVariant && isActive && !scrolled && "text-primary font-black"
                                 )}>
                                     {cat.name}
                                 </span>

@@ -41,17 +41,9 @@ export default async function CategoryPage({ params }) {
         <div className="pb-12 md:pb-24 min-h-screen">
 
 
-            <div className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] px-4 md:px-0 pt-12 md:pt-24">
-                <CategorySlider categories={serializedCategories} isSticky={true} activeSlug={slug} />
-                <div className="flex flex-col gap-12 md:gap-20">
-                    {/* Header Section */}
-                    <div className="space-y-8">
-                        <Link href="/shop" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-primary hover:text-foreground transition-colors group">
-                            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-                            Back to Shop
-                        </Link>
-
-                    </div>
+            <div className="max-w-[1440px] mx-auto lg:w-[85%] xl:w-[80%] px-4 md:px-0 pt-20 md:pt-24">
+                <CategorySlider categories={serializedCategories} isSticky={true} activeSlug={slug} variant="text" />
+                <div className="flex flex-col gap-8 md:gap-12 mt-4 md:mt-8">
 
                     <div className="grid lg:grid-cols-6 gap-12 md:gap-4">
 
